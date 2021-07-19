@@ -1,0 +1,13 @@
+fragment RegularPost on Post {
+  id
+  creator {
+    id
+    username
+  }
+  createdAt
+  updatedAt
+  text
+  points
+  title
+  voteStatus
+}

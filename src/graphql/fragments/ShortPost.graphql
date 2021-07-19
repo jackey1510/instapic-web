@@ -1,0 +1,14 @@
+fragment ShortPost on Post {
+  id
+  creatorId
+  createdAt
+  updatedAt
+  textSnippet
+  points
+  title
+  voteStatus
+  creator {
+    id
+    username
+  }
+}
