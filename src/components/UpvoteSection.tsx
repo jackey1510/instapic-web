@@ -1,15 +1,13 @@
 import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 import { Box, IconButton, Text } from "@chakra-ui/react";
 import React from "react";
-import { ShortPostFragment, useVoteMutation } from "../generated/graphql";
 
 interface UpvoteSectionProps {
-  post: ShortPostFragment;
+  post: any
 }
 
 export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
-  const [{ fetching }, upvote] = useVoteMutation();
-  const [{ fetching: downvoting }, downvote] = useVoteMutation();
+
   //   const [upvoteColor, setUpvoteColor] = useState<"grey" | "green">("grey");
   //   const [downvoteColor, setDownvoteColor] = useState<"grey" | "red">("grey");
 
@@ -20,9 +18,9 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
         icon={<ArrowUpIcon size="24px" />}
         colorScheme={post.voteStatus === 1 ? "green" : undefined}
         onClick={() => {
-          upvote({ value: 1, postId: post.id });
+
         }}
-        isLoading={fetching}
+        isLoading={false}
       ></IconButton>
       <Text textAlign="center">{post.points}</Text>
       <IconButton
@@ -30,10 +28,10 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
         icon={<ArrowDownIcon size="24px" />}
         colorScheme={post.voteStatus === -1 ? "red" : undefined}
         onClick={() => {
-          downvote({ value: -1, postId: post.id });
+
           //   setDownvoteColor("red");
         }}
-        isLoading={downvoting}
+        isLoading={false}
       ></IconButton>
     </Box>
   );

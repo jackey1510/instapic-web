@@ -1,6 +1,0 @@
-fragment ShortPaginatedPost on PaginatedPosts {
-  posts {
-    ...ShortPost
-  }
-  hasNext
-}

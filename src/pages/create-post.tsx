@@ -3,28 +3,25 @@ import { Formik, Form } from "formik";
 
 import React from "react";
 import InputField from "../components/InputField";
-import { useCreatePostMutation } from "../generated/graphql";
-import { withUrqlClient } from "next-urql";
-import { creatUrqlClient } from "../utils/createUrqlClient";
 import { PostLayout } from "../components/PostLayout";
 import { useIsAuth } from "../utils/useIsAuth";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 
-interface createPostProps {}
+interface createPostProps { }
 
-const createPost: React.FC<createPostProps> = ({}) => {
+const createPost: React.FC<createPostProps> = ({ }) => {
   useIsAuth();
-  const router = useRouter();
-  const [, createPost] = useCreatePostMutation();
+  // const router = useRouter();
+  // const [, createPost] = useCreatePostMutation();
   return (
     <PostLayout variant="small">
       <Formik
         initialValues={{ title: "", text: "" }}
-        onSubmit={async (values) => {
-          const { error } = await createPost({ input: values });
-          if (!error) {
-            router.push("/");
-          }
+        onSubmit={async () => {
+          // const { error } = await createPost({ input: values });
+          // if (!error) {
+          //   router.push("/");s
+          // }
         }}
       >
         {({ isSubmitting }) => (
@@ -57,4 +54,4 @@ const createPost: React.FC<createPostProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(creatUrqlClient)(createPost);
+export default createPost;

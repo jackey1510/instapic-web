@@ -3,30 +3,48 @@ import { Formik, Form } from "formik";
 import { Box, Button } from "@chakra-ui/react";
 import Wrapper from "../components/Wrapper";
 import InputField from "../components/InputField";
-import { useRegisterMutation } from "../generated/graphql";
-import { toErrorMap } from "../utils/toErrorMap";
-import { useRouter } from "next/router";
-import { withUrqlClient } from "next-urql";
-import { creatUrqlClient } from "../utils/createUrqlClient";
+import { useMutation } from "react-query";
+import { axiosQuery } from "../utils/axios";
+import { useRouter } from "next/dist/client/router";
 
-interface registerProps {}
+interface registerProps { }
 
-export const Register: React.FC<registerProps> = ({}) => {
+interface registerDto {
+  username: string
+  email: string
+  password: string
+}
+
+export const Register: React.FC<registerProps> = ({ }) => {
   const router = useRouter();
-  const [, register] = useRegisterMutation();
+  // const [, register] = useRegisterMutation();
+
+  const registerQuery = (values: registerDto) => {
+    return axiosQuery({ url: 'users/register', data: values, method: 'POST' })
+  }
+  const { status, mutate: register, data } = useMutation('register', registerQuery)
   return (
     <Wrapper variant="small">
       <Formik
         initialValues={{ username: "", password: "", email: "" }}
-        onSubmit={async (values, { setErrors }) => {
+        onSubmit={async (values: registerDto) => {
           console.log(values);
-          const res = await register({ userInput: values });
-          console.log(res);
-          if (res.data?.register.errors) {
-            return setErrors(toErrorMap(res.data.register.errors));
-          }
-          if (res.data?.register.user) {
-            router.push("/");
+          await register(values);
+          // if (res.data?.register.errors) {
+          //   return setErrors(toErrorMap(res.data.register.errors));
+          // }
+          console.log(status)
+          // console.log(status)
+          // if (status === 'error') {
+          //   return console.error(error)
+          // }
+
+          if (status === 'success') {
+            if (data && data?.status > 299) {
+              return console.log(data?.data)
+            }
+
+            return router.push("/");
           }
         }}
       >
@@ -67,4 +85,4 @@ export const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(creatUrqlClient)(Register);
+export default Register;
