@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react'
-import { useDisclosure, Button, Drawer, DrawerOverlay, Text, DrawerContent, DrawerCloseButton, DrawerBody, DrawerFooter, Link, Box, Stack, DrawerHeader, IconButton, } from '@chakra-ui/react'
-import { DarkModeSwitch } from './DarkModeSwitch'
 import { HamburgerIcon } from '@chakra-ui/icons'
-import NextLink from './NextLink'
+import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, IconButton, Link, Stack, Text, useDisclosure } from '@chakra-ui/react'
 import { useRouter } from 'next/dist/client/router'
 import NLink from 'next/link'
+import React from 'react'
+import { useMutation, useQuery } from 'react-query'
 import { axiosQuery } from '../utils/axios'
-import { useQuery, useMutation } from 'react-query'
 import { getAccessToken, refreshToken } from '../utils/jwt'
+import { DarkModeSwitch } from './DarkModeSwitch'
+import NextLink from './NextLink'
 
 interface HamburgerMenuProps {
 
@@ -15,36 +15,25 @@ interface HamburgerMenuProps {
 
 export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
-    // const btnRef = React.useRef<string>()
     const router = useRouter();
 
     let token = getAccessToken();
     const meQuery = async () => {
-        console.log('token:', token)
-
         if (!token) {
             token = await refreshToken();
         }
-        console.log('token:', token)
         if (token) {
             return axiosQuery({ url: '/users/profile' }).catch(err => console.log(err))
         }
         return
     }
-
-
-
-    const { data, isFetching, isSuccess, status } = useQuery('me', meQuery)
+    const { data, isFetching, isSuccess } = useQuery('me', meQuery)
     const logoutMutation = () => {
         return axiosQuery({ url: "/auth/logout" }).catch(err => console.log(err))
     }
     const { isLoading, mutateAsync: logout } = useMutation('logout', logoutMutation, {
 
     })
-    useEffect(() => {
-        console.log(status)
-        console.log(token);
-    }, [status, token])
 
     let body = null;
     if (isFetching) {
