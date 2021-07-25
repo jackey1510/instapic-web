@@ -1,21 +1,51 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { Box, Button, Flex, Link } from "@chakra-ui/react";
-import Wrapper from "../components/Wrapper";
+import { Box, Button, Flex, Link, } from "@chakra-ui/react";
+
 import InputField from "../components/InputField";
 
 import NextLink from "next/link";
+import { axiosQuery } from "../utils/axios";
+import { useMutation } from "react-query";
+import { useRouter } from "next/dist/client/router";
+import { toErrorMap } from "../utils/toErrorMap";
+import { setAccessToken } from "../utils/jwt";
+
+import { MainLayout } from "../components/MainLayout";
+import { AxiosResponse } from "axios";
 
 interface loginProps { }
 
+interface loginDto {
+  usernameOrEmail: string
+  password: string
+}
+
 export const Login: React.FC<loginProps> = ({ }) => {
+  const router = useRouter();
+  const loginMutation = (values: loginDto) => {
+    return axiosQuery({ url: '/auth/login', data: values, method: 'POST' })
+  }
+  const { mutateAsync: login } = useMutation('register', loginMutation)
 
   return (
-    <Wrapper variant="small">
+
+    <MainLayout variant="small">
       <Formik
         initialValues={{ usernameOrEmail: "", password: "" }}
-        onSubmit={async () => {
+        onSubmit={async (values: loginDto, { setErrors }) => {
+          const res = await login(values, {
 
+          }).catch(error => {
+            setErrors(toErrorMap(error.message))
+          });
+
+          if ((res) && res.data) {
+            console.log('token', res.data.accessToken);
+            setAccessToken(res.data.accessToken);
+            return router.push("/")
+          }
+          return;
         }}
       >
         {({ isSubmitting }) => (
@@ -23,14 +53,14 @@ export const Login: React.FC<loginProps> = ({ }) => {
             <InputField
               name="usernameOrEmail"
               placeholder="username or email"
-              label="username or email"
+              label="Username or Email"
             ></InputField>
             <Box mt={4}>
               <InputField
                 name="password"
                 placeholder="password"
                 label="password"
-                type="password"
+                password
               ></InputField>
             </Box>
             <Flex>
@@ -51,7 +81,7 @@ export const Login: React.FC<loginProps> = ({ }) => {
           </Form>
         )}
       </Formik>
-    </Wrapper>
+    </MainLayout >
   );
 };
 

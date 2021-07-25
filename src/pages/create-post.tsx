@@ -3,18 +3,18 @@ import { Formik, Form } from "formik";
 
 import React from "react";
 import InputField from "../components/InputField";
-import { PostLayout } from "../components/PostLayout";
-import { useIsAuth } from "../utils/useIsAuth";
+import { MainLayout } from "../components/MainLayout";
+// import { useIsAuth } from "../utils/useIsAuth";
 // import { useRouter } from "next/router";
 
 interface createPostProps { }
 
 const createPost: React.FC<createPostProps> = ({ }) => {
-  useIsAuth();
+  // useIsAuth();
   // const router = useRouter();
   // const [, createPost] = useCreatePostMutation();
   return (
-    <PostLayout variant="small">
+    <MainLayout variant="small">
       <Formik
         initialValues={{ title: "", text: "" }}
         onSubmit={async () => {
@@ -50,7 +50,7 @@ const createPost: React.FC<createPostProps> = ({ }) => {
           </Form>
         )}
       </Formik>
-    </PostLayout>
+    </MainLayout>
   );
 };
 

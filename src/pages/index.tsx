@@ -1,9 +1,9 @@
 import React from "react";
-import { PostLayout } from "../components/PostLayout";
+import { MainLayout } from "../components/MainLayout";
 const Index = () => {
   return (
-    <PostLayout variant="large">
-    </PostLayout>
+    <MainLayout variant="large">
+    </MainLayout>
   );
 };
 

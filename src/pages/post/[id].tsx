@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import React from 'react';
-import { PostLayout } from '../../components/PostLayout';
+import { MainLayout } from '../../components/MainLayout';
 
 
 const FullPost: React.FC<{}> = ({ }) => {
@@ -20,7 +20,7 @@ const FullPost: React.FC<{}> = ({ }) => {
     // }
 
     return (
-        <PostLayout>
+        <MainLayout>
             <Box alignItems="stretch"
                 p={5}
                 shadow="md"
@@ -31,7 +31,7 @@ const FullPost: React.FC<{}> = ({ }) => {
                 </Flex>
                 <Text>{data?.post?.text}</Text> */}
             </Box>
-        </PostLayout>
+        </MainLayout>
     );
 }
 export default FullPost

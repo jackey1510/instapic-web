@@ -4,6 +4,7 @@ import {
   QueryClientProvider,
 } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import '@fontsource/shadows-into-light'
 
 import theme from "../theme";
 

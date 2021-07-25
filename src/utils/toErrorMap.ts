@@ -1,8 +1,12 @@
-export const toErrorMap = (errors: Error[]) => {
+export interface ErrorResponse {
+  field: string;
+  error: string;
+}
+
+export const toErrorMap = (errors: ErrorResponse[]) => {
   const errorMap: Record<string, string> = {};
-  let i = 0;
-  errors.forEach(({ message }) => {
-    errorMap[i++] = message;
+  errors.forEach(({ field, error }) => {
+    errorMap[field] = error;
   });
   return errorMap;
 };
