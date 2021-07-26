@@ -2,20 +2,21 @@ import { Box, Button, Input } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/dist/client/router";
 
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useMutation } from "react-query";
 import InputField from "../components/InputField";
 import { MainLayout } from "../components/MainLayout";
 import { axiosQuery } from "../utils/axios";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useIsAuth } from "../utils/useIsAuth";
+import FileInput from "../components/FileInput";
 
 // import { useIsAuth } from "../utils/useIsAuth";
 // import { useRouter } from "next/router";
 
-interface createPostProps {}
+interface createPostProps { }
 
-const createPost: React.FC<createPostProps> = ({}) => {
+const createPost: React.FC<createPostProps> = ({ }) => {
   useIsAuth();
   interface createPostDto {
     text: string;
@@ -38,26 +39,51 @@ const createPost: React.FC<createPostProps> = ({}) => {
     "createPost",
     createPostMutation
   );
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [inputFile, setInputFile] = useState<File>();
 
   return (
     <MainLayout variant="small">
       <Formik
-        initialValues={{ text: "" }}
+        initialValues={{ text: "", image: "" }}
         onSubmit={async (values, { setErrors }) => {
-          const res = await createPost(values).catch((err) => {
-            setErrors(toErrorMap(err.message));
-          });
-          if (res) console.log(res);
+          console.log(values)
+          console.log(inputFile)
+          // const res = await createPost(values).catch((err) => {
+          //   setErrors(toErrorMap(err.message));
+          // });
+          // if (res) console.log(res);
         }}
       >
         {({ isSubmitting }) => (
           <Form>
-            <InputField
+            {/* <InputField
               name="image"
               placeholder="image"
               label="image"
               type="file"
-            ></InputField>
+            ></InputField> */}
+            <FileInput
+              name="image"
+              placeholder="Choose an image"
+              label="image"
+              acceptedFileTypes="image/*"
+            >
+              <input
+                type="file"
+                accept={"image/*"}
+                ref={inputRef}
+                onChange={event => { return setInputFile(event.target.files![0]); }}
+                style={{ display: "none" }}
+              ></input>
+              <Input
+                placeholder={"Choose an image" || "Your file ..."}
+                onClick={() => inputRef.current!.click()}
+                name={"image"}
+                id={"image"}
+                value={inputFile?.name}
+              />
+            </FileInput>
 
             <Box mt={4}>
               <InputField

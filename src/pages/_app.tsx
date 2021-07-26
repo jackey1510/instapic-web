@@ -8,7 +8,7 @@ import '@fontsource/shadows-into-light'
 
 import theme from "../theme";
 
-const queryClient = new QueryClient()
+export const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }: any) {
   return (

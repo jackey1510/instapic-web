@@ -25,9 +25,9 @@ import { useMeQuery } from "../utils/useMeQuery";
 import { DarkModeSwitch } from "./DarkModeSwitch";
 import NextLink from "./NextLink";
 
-interface HamburgerMenuProps {}
+interface HamburgerMenuProps { }
 
-export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({}) => {
+export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
 

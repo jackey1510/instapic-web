@@ -13,14 +13,14 @@ import { setAccessToken } from "../utils/jwt";
 
 import { MainLayout } from "../components/MainLayout";
 
-interface loginProps {}
+interface loginProps { }
 
 interface loginDto {
   usernameOrEmail: string;
   password: string;
 }
 
-export const Login: React.FC<loginProps> = ({}) => {
+export const Login: React.FC<loginProps> = ({ }) => {
   const router = useRouter();
   const loginMutation = (values: loginDto) => {
     return axiosQuery<{ accessToken: string }>({
@@ -41,7 +41,6 @@ export const Login: React.FC<loginProps> = ({}) => {
           });
 
           if (res && res.data) {
-            console.log("token", res.data.accessToken);
             setAccessToken(res.data.accessToken);
             return router.push("/");
           }
