@@ -3,6 +3,10 @@ import { decode, JwtPayload } from "jsonwebtoken";
 
 export let accessToken = "";
 
+export interface accessTokenDto {
+  accessToken: string;
+}
+
 export const setAccessToken = (token: string) => {
   accessToken = token;
 };
@@ -26,7 +30,13 @@ export const getAccessTokenUpdated = async () => {
 };
 
 export const refreshToken = async () => {
-  let res = await axiosQuery({ url: "/auth/refresh-token", method: "POST" });
-  if (res) accessToken = res?.data?.accessToken;
+  let res = await axiosQuery<accessTokenDto>({
+    url: "/auth/refresh-token",
+    method: "POST",
+  });
+
+  if (res) {
+    accessToken = res?.data?.accessToken;
+  }
   return accessToken;
 };
