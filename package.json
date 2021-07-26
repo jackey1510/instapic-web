@@ -5,7 +5,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "gen-env": "gen-env-types .env -o src/types/env.d.ts -e ."
+    "gen-env": "gen-env-types .env.local -o src/types/env.d.ts -e ."
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.14",
@@ -13,11 +13,13 @@
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@fontsource/shadows-into-light": "^4.5.0",
+    "@squoosh/lib": "^0.4.0",
     "@types/jsonwebtoken": "^8.5.4",
     "axios": "^0.21.1",
     "formik": "^2.2.9",
     "framer-motion": "^4.0.3",
     "graphql": "^15.5.1",
+    "imagekitio-react": "^1.0.10",
     "jsonwebtoken": "^8.5.1",
     "next": "latest",
     "react": "^17.0.2",

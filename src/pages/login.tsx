@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { Box, Button, Flex, Link, } from "@chakra-ui/react";
+import { Box, Button, Flex, Link } from "@chakra-ui/react";
 
 import InputField from "../components/InputField";
 
@@ -12,38 +12,38 @@ import { toErrorMap } from "../utils/toErrorMap";
 import { setAccessToken } from "../utils/jwt";
 
 import { MainLayout } from "../components/MainLayout";
-import { AxiosResponse } from "axios";
 
-interface loginProps { }
+interface loginProps {}
 
 interface loginDto {
-  usernameOrEmail: string
-  password: string
+  usernameOrEmail: string;
+  password: string;
 }
 
-export const Login: React.FC<loginProps> = ({ }) => {
+export const Login: React.FC<loginProps> = ({}) => {
   const router = useRouter();
   const loginMutation = (values: loginDto) => {
-    return axiosQuery({ url: '/auth/login', data: values, method: 'POST' })
-  }
-  const { mutateAsync: login } = useMutation('register', loginMutation)
+    return axiosQuery<{ accessToken: string }>({
+      url: "/auth/login",
+      data: values,
+      method: "POST",
+    });
+  };
+  const { mutateAsync: login } = useMutation("register", loginMutation);
 
   return (
-
     <MainLayout variant="small">
       <Formik
         initialValues={{ usernameOrEmail: "", password: "" }}
         onSubmit={async (values: loginDto, { setErrors }) => {
-          const res = await login(values, {
-
-          }).catch(error => {
-            setErrors(toErrorMap(error.message))
+          const res = await login(values, {}).catch((error) => {
+            setErrors(toErrorMap(error.message));
           });
 
-          if ((res) && res.data) {
-            console.log('token', res.data.accessToken);
+          if (res && res.data) {
+            console.log("token", res.data.accessToken);
             setAccessToken(res.data.accessToken);
-            return router.push("/")
+            return router.push("/");
           }
           return;
         }}
@@ -81,7 +81,7 @@ export const Login: React.FC<loginProps> = ({ }) => {
           </Form>
         )}
       </Formik>
-    </MainLayout >
+    </MainLayout>
   );
 };
 

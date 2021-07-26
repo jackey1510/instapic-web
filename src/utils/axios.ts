@@ -7,10 +7,10 @@ const query = axios.create({
   withCredentials: true,
 });
 
-export const axiosQuery = async (config: AxiosRequestConfig) => {
-  return new Promise<AxiosResponse | void>(async (resolve, reject) => {
-    const res: void | AxiosResponse = await query
-      .request({
+export const axiosQuery = async <T>(config: AxiosRequestConfig) => {
+  return new Promise<AxiosResponse<T> | void>(async (resolve, reject) => {
+    const res: void | AxiosResponse<T> = await query
+      .request<T>({
         headers: {
           authorization: `Bearer ${await getAccessTokenUpdated()}`,
         },
