@@ -25,16 +25,15 @@ import { axiosQuery } from "../utils/axios";
 
 import { useMeQuery } from "../utils/useMeQuery";
 import { DarkModeSwitch } from "./DarkModeSwitch";
+import { mainColor } from "../utils/colorScheme";
 
-interface HamburgerMenuProps {}
+interface HamburgerMenuProps { }
 
-export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({}) => {
+export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
 
   const { colorMode } = useColorMode();
-
-  const color = { light: "black", dark: "white" };
 
   const { data, isFetching, isSuccess } = useMeQuery();
   const logoutMutation = () => {
@@ -60,12 +59,12 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({}) => {
           <Stack spacing="8px">
             <Box height={8}></Box>
             <NLink href="/login">
-              <Button as={Link} mr={3} color={color[colorMode]}>
+              <Button as={Link} mr={3} color={mainColor[colorMode]}>
                 Login
               </Button>
             </NLink>
             <NLink href="/register">
-              <Button as={Link} mr={3} color={color[colorMode]}>
+              <Button as={Link} mr={3} color={mainColor[colorMode]}>
                 Register
               </Button>
             </NLink>
@@ -79,14 +78,14 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({}) => {
     body = (
       <>
         <DrawerHeader borderBottomWidth="1px">
-          <Text color={color[colorMode]} mr={4}>
+          <Text color={mainColor[colorMode]} mr={4}>
             {data.data.username}
           </Text>
         </DrawerHeader>
         <DrawerBody>
           <Stack spacing="24px">
             <NLink href="/create-post">
-              <Button as={Link} mr={3} color={color[colorMode]}>
+              <Button as={Link} mr={3} color={mainColor[colorMode]}>
                 Create Post
               </Button>
             </NLink>
@@ -121,10 +120,8 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({}) => {
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerCloseButton color={color[colorMode]} />
-
+          <DrawerCloseButton color={mainColor[colorMode]} />
           {body}
-
           <DrawerFooter>
             <DarkModeSwitch />
           </DrawerFooter>

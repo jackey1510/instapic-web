@@ -3,12 +3,7 @@ import { axiosQuery } from "./axios";
 import { getAccessToken, refreshToken } from "./jwt";
 import { queryClient } from "../pages/_app";
 import { AxiosResponse } from "axios";
-
-export interface UserDto {
-  username: string;
-  email: string;
-  bio: string;
-}
+import { UserDto } from "../dto/response/user.dto";
 
 export const useMeQuery = () => {
   let token = getAccessToken();

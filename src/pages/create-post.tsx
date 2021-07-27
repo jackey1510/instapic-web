@@ -20,24 +20,18 @@ import { toErrorMap } from "../utils/toErrorMap";
 import { useIsAuth } from "../utils/useIsAuth";
 import FileInput from "../components/FileInput";
 import { uploadPhotosToSignedUrl } from "../utils/uploadPhotos";
+import InputSwitch from "../components/InputSwitch";
+import { createPostDto } from "../dto/request/create-post.dto";
+import { createPostResponseDto } from "../dto/response/create-post-response.dto";
 
-interface createPostProps {}
+interface createPostProps { }
 
-const createPost: React.FC<createPostProps> = ({}) => {
+const createPost: React.FC<createPostProps> = ({ }) => {
   useIsAuth();
-  interface createPostDto {
-    text: string;
-    public: boolean;
-    fileType: string;
-  }
-  interface createPostResponse {
-    fileName: string;
-    photoUrl: string;
-    signedUrl: string;
-  }
+
 
   const createPostMutation = (data: createPostDto) => {
-    return axiosQuery<createPostResponse>({
+    return axiosQuery<createPostResponseDto>({
       url: "/posts",
       data,
       method: "post",
@@ -85,9 +79,7 @@ const createPost: React.FC<createPostProps> = ({}) => {
           <Form>
             <FileInput
               name="image"
-              placeholder="Choose an image"
               label="image"
-              acceptedFileTypes="image/*"
             >
               <Input
                 type="file"
@@ -98,7 +90,7 @@ const createPost: React.FC<createPostProps> = ({}) => {
                 }}
                 placeholder={"Choose an image"}
                 alignContent="center"
-                // style={{ display: "none" }}
+              // style={{ display: "none" }}
               ></Input>
               {/* <Input
                 placeholder={"Choose an image" || "Your file ..."}
@@ -116,6 +108,12 @@ const createPost: React.FC<createPostProps> = ({}) => {
                 placeholder="type your post here"
                 label="description"
               ></InputField>
+            </Box>
+            <Box mt={4}>
+              <InputSwitch
+                name="public"
+                label="public your post?"
+              ></InputSwitch>
             </Box>
             <Button
               mt={4}

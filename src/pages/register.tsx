@@ -7,29 +7,25 @@ import { axiosQuery } from "../utils/axios";
 import { useRouter } from "next/dist/client/router";
 import { toErrorMap } from "../utils/toErrorMap";
 import { MainLayout } from "../components/MainLayout";
+import PasswordField from "../components/PasswordField";
+import { createUserDto } from "../dto/request/create-user.dto";
 
-interface registerProps {}
+interface registerProps { }
 
-interface registerDto {
-  username: string;
-  email: string;
-  password: string;
-}
-
-export const Register: React.FC<registerProps> = ({}) => {
+export const Register: React.FC<registerProps> = ({ }) => {
   const router = useRouter();
-  const registerMutation = (values: registerDto) => {
+  const registerMutation = (values: createUserDto) => {
     return axiosQuery({ url: "/users/register", data: values, method: "POST" });
   };
   const { mutateAsync: register } = useMutation("register", registerMutation);
   return (
     <MainLayout variant="small">
       <Formik
-        initialValues={{ username: "", password: "", email: "" }}
-        onSubmit={async (values: registerDto, { setErrors }) => {
+        initialValues={{ username: "", password: "", email: "", passwordConfirm: "" }}
+        onSubmit={async (values: createUserDto, { setErrors }) => {
           await register(values, {
             onSuccess: () => {
-              return router.push("/");
+              return router.push("/login");
             },
           }).catch((error) => {
             setErrors(toErrorMap(error.message));
@@ -51,12 +47,18 @@ export const Register: React.FC<registerProps> = ({}) => {
               ></InputField>
             </Box>
             <Box mt={4}>
-              <InputField
+              <PasswordField
                 name="password"
                 placeholder="password"
                 label="password"
-                password
-              ></InputField>
+              ></PasswordField>
+            </Box>
+            <Box mt={4}>
+              <PasswordField
+                name="passwordConfirm"
+                placeholder="re-enter your password"
+                label="password confirm"
+              ></PasswordField>
             </Box>
             <Button
               mt={4}

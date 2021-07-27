@@ -12,13 +12,10 @@ import { toErrorMap } from "../utils/toErrorMap";
 import { setAccessToken } from "../utils/jwt";
 
 import { MainLayout } from "../components/MainLayout";
+import PasswordField from "../components/PasswordField";
+import { loginDto } from "../dto/request/login.dto";
 
 interface loginProps { }
-
-interface loginDto {
-  usernameOrEmail: string;
-  password: string;
-}
 
 export const Login: React.FC<loginProps> = ({ }) => {
   const router = useRouter();
@@ -55,12 +52,11 @@ export const Login: React.FC<loginProps> = ({ }) => {
               label="Username or Email"
             ></InputField>
             <Box mt={4}>
-              <InputField
+              <PasswordField
                 name="password"
                 placeholder="password"
                 label="password"
-                password
-              ></InputField>
+              ></PasswordField>
             </Box>
             <Flex>
               <NextLink href="/forgot-password">

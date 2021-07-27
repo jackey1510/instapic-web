@@ -8,9 +8,6 @@ export const DarkModeSwitch = () => {
     <>
       {isDark ? <SunIcon color="white" mr={3} /> : <MoonIcon mr={3} />}
       <Switch
-        // position="fixed"
-        // top="1rem"
-        // right="1rem"
         color="green"
         isChecked={isDark}
         onChange={toggleColorMode}

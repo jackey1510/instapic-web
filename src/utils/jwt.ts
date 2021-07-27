@@ -1,14 +1,18 @@
 import { axiosQuery } from "./axios";
 import { decode, JwtPayload } from "jsonwebtoken";
+import { accessTokenDto } from "../dto/response/access_token.dto";
 
 export let accessToken = "";
-
-export interface accessTokenDto {
-  accessToken: string;
-}
+export let expiryTime: Date;
 
 export const setAccessToken = (token: string) => {
   accessToken = token;
+  let payload = decode(accessToken);
+  if (payload) {
+    expiryTime = new Date((payload as JwtPayload).exp! * 1000);
+    return;
+  }
+  expiryTime = new Date(0);
 };
 
 export const getAccessToken = () => {
@@ -19,12 +23,9 @@ export const getAccessTokenUpdated = async () => {
   if (!accessToken) {
     return "";
   }
-  let payload = decode(accessToken);
-  if (payload) {
-    let expiryTime = new Date((payload as JwtPayload).exp!);
-    if (new Date() < expiryTime) {
-      accessToken = await refreshToken();
-    }
+
+  if (new Date() > expiryTime) {
+    accessToken = await refreshToken();
   }
   return accessToken;
 };
@@ -36,7 +37,7 @@ export const refreshToken = async () => {
   });
 
   if (res) {
-    accessToken = res?.data?.accessToken;
+    setAccessToken(res?.data?.accessToken);
   }
   return accessToken;
 };
