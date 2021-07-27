@@ -13,26 +13,26 @@ export const ResetPassword: NextPage = () => {
     <Wrapper variant="small">
       <Formik
         initialValues={{ newPassword: "" }}
-        onSubmit={() => { }}
-      // onSubmit={async (values, { setErrors }) => {
-      // const token =
-      //   typeof router.query.token === "string" ? router.query.token : "";
-      // const res = await changePassword({
-      //   newPassword: values.newPassword,
-      //   token,
-      // });
+        onSubmit={() => {}}
+        // onSubmit={async (values, { setErrors }) => {
+        // const token =
+        //   typeof router.query.token === "string" ? router.query.token : "";
+        // const res = await changePassword({
+        //   newPassword: values.newPassword,
+        //   token,
+        // });
 
-      // if (res.data?.changePassword.errors) {
-      //   const errorMap = toErrorMap(res.data.changePassword.errors);
-      //   if ("token" in errorMap) {
-      //     setTokenError(errorMap.token);
-      //   }
-      //   return setErrors(errorMap);
-      // }
-      // if (res.data?.changePassword.user) {
-      //   router.push("/");
-      // }
-      // }}
+        // if (res.data?.changePassword.errors) {
+        //   const errorMap = toErrorMap(res.data.changePassword.errors);
+        //   if ("token" in errorMap) {
+        //     setTokenError(errorMap.token);
+        //   }
+        //   return setErrors(errorMap);
+        // }
+        // if (res.data?.changePassword.user) {
+        //   router.push("/");
+        // }
+        // }}
       >
         {({ isSubmitting }) => (
           <Form>
@@ -42,7 +42,7 @@ export const ResetPassword: NextPage = () => {
               label="New Password"
               type="password"
             ></InputField>
-            {(
+            {
               <Flex>
                 <Box mr={2} color="red">
                   {}
@@ -51,7 +51,7 @@ export const ResetPassword: NextPage = () => {
                   <Link>Go forget again</Link>
                 </NextLink>
               </Flex>
-            )}
+            }
             <Button
               mt={4}
               type="submit"

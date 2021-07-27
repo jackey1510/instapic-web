@@ -7,7 +7,7 @@ const query = axios.create({
   withCredentials: true,
 });
 
-export const axiosQuery = async <T>(config: AxiosRequestConfig) => {
+export const axiosQuery = async <T = any>(config: AxiosRequestConfig) => {
   return new Promise<AxiosResponse<T> | void>(async (resolve, reject) => {
     const res: void | AxiosResponse<T> = await query
       .request<T>({

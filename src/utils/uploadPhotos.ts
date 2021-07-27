@@ -9,6 +9,7 @@ export const uploadPhotosToSignedUrl = async (file: any, signedUrl: string) => {
     })
     .catch((err) => {
       console.log(err);
+      return false;
     });
   return true;
 };

@@ -13,6 +13,7 @@ import {
   InputGroup,
   InputRightElement,
   Button,
+  Switch,
 } from "@chakra-ui/react";
 import { useField } from "formik";
 import _ from "lodash";
@@ -23,34 +24,43 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> &
     label: string;
     textarea?: boolean;
     password?: boolean;
+    isSwitch?: boolean;
   };
 
 export const InputField: React.FC<InputFieldProps> = ({
   label,
   textarea,
   password,
+  isSwitch,
   size = _,
   ...props
 }) => {
   const [field, { error }] = useField(props);
-  let InputOrTextArea: ComponentWithAs<ElementType<any>, any> = Input;
+  let InputType: ComponentWithAs<ElementType<any>, any> = Input;
   if (textarea) {
-    InputOrTextArea = Textarea;
+    InputType = Textarea;
+  }
+  if (isSwitch) {
+    InputType = Switch;
   }
 
-  const [show, setShow] = React.useState(false)
-  const handleClick = () => setShow(!show)
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
 
   return (
     <FormControl isInvalid={!!error}>
       <FormLabel htmlFor={field.name}>{label}</FormLabel>
-      {!password ? <InputOrTextArea
-        {...field}
-        {...props}
-        id={field.name}
-        placeholder={props.placeholder}
-      /> : <InputGroup>
+      {!password ? (
+        <InputType
+          {...field}
+          {...props}
+          id={field.name}
+          placeholder={props.placeholder}
+        />
+      ) : (
+        <InputGroup>
           <Input
+            mt={3}
             pr="4.5rem"
             type={show ? "text" : "password"}
             {...field}
@@ -63,8 +73,8 @@ export const InputField: React.FC<InputFieldProps> = ({
               {show ? "Hide" : "Show"}
             </Button>
           </InputRightElement>
-        </InputGroup>}
-
+        </InputGroup>
+      )}
 
       {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
     </FormControl>
