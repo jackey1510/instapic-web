@@ -1,14 +1,11 @@
 import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react";
-import {
-  QueryClient,
-  QueryClientProvider,
-} from 'react-query'
-import { ReactQueryDevtools } from 'react-query/devtools'
-import '@fontsource/shadows-into-light'
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+import "@fontsource/shadows-into-light";
 
 import theme from "../theme";
 
-export const queryClient = new QueryClient()
+export const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: any) {
   return (
@@ -22,7 +19,7 @@ function MyApp({ Component, pageProps }: any) {
           <Component {...pageProps} />
         </ColorModeProvider>
       </ChakraProvider>
-      <ReactQueryDevtools initialIsOpen={true}></ReactQueryDevtools>
+      {/* <ReactQueryDevtools initialIsOpen={true}></ReactQueryDevtools> */}
     </QueryClientProvider>
   );
 }

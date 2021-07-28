@@ -23,7 +23,6 @@ export const getAccessTokenUpdated = async () => {
   if (!accessToken) {
     return "";
   }
-
   if (new Date() > expiryTime) {
     accessToken = await refreshToken();
   }

@@ -9,21 +9,26 @@ export const Wrapper: React.FC<WrapperProps> = ({
   children,
   variant = "small",
 }) => {
-  const { colorMode } = useColorMode()
-  const color = { light: 'black', dark: 'white' }
-  const bgColor = { light: 'gray.50', dark: 'gray.900' }
+  const { colorMode } = useColorMode();
+  const color = { light: "black", dark: "white" };
+  const bgColor = { light: "gray.50", dark: "gray.900" };
   return (
-    <Box height="100vh"
+    <Box
+      height="100vh"
       bg={bgColor[colorMode]}
-
-      color={color[colorMode]}>
+      color={color[colorMode]}
+      overflowY="scroll"
+    >
       <Box
         maxW={
-          variant === "small" ? "400px" : variant === "regular" ? "800px" : "800px"
+          variant === "small"
+            ? "400px"
+            : variant === "regular"
+            ? "800px"
+            : "1000px"
         }
         w="100%"
-        ph={8}
-        pt={8}
+        py={8}
         px={8}
         mx="auto"
       >
