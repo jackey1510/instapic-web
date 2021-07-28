@@ -15,28 +15,17 @@ import React, { useRef, useState } from "react";
 import { useMutation } from "react-query";
 import InputField from "../components/InputField";
 import { MainLayout } from "../components/MainLayout";
-import { axiosQuery } from "../utils/axios";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useIsAuth } from "../utils/useIsAuth";
 import FileInput from "../components/FileInput";
 import { uploadPhotosToSignedUrl } from "../utils/uploadPhotos";
 import InputSwitch from "../components/InputSwitch";
-import { createPostDto } from "../dto/request/create-post.dto";
-import { createPostResponseDto } from "../dto/response/create-post-response.dto";
+import { createPostMutation } from "../query/createPostMutation";
 
 interface createPostProps { }
 
 const createPost: React.FC<createPostProps> = ({ }) => {
   useIsAuth();
-
-
-  const createPostMutation = (data: createPostDto) => {
-    return axiosQuery<createPostResponseDto>({
-      url: "/posts",
-      data,
-      method: "post",
-    });
-  };
 
   const router = useRouter();
 
@@ -54,8 +43,7 @@ const createPost: React.FC<createPostProps> = ({ }) => {
         initialValues={{ text: "", public: true }}
         onSubmit={async (values, { setErrors }) => {
           if (!inputFile) {
-            setUploadState("error");
-            return;
+            return setUploadState("error");
           }
           //create post and get signed url
           const res = await createPost({
@@ -130,8 +118,8 @@ const createPost: React.FC<createPostProps> = ({ }) => {
         <Alert status={uploadState} mt={4}>
           <AlertIcon />
           <AlertTitle mr={2}>Upload Failed!</AlertTitle>
-          <AlertDescription>Your file is invalid.</AlertDescription>
-          <CloseButton position="absolute" right="8px" top="8px" />
+          <AlertDescription>Your input is invalid.</AlertDescription>
+          <CloseButton position="absolute" right="8px" top="8px" onClick={() => setUploadState(undefined)} />
         </Alert>
       ) : uploadState === "success" ? (
         <Alert status={uploadState} variant="subtle" mt={4}>

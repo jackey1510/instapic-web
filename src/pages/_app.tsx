@@ -1,11 +1,18 @@
 import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import "@fontsource/shadows-into-light";
 
 import theme from "../theme";
+import { Hydrate } from "react-query/hydration";
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false
+    },
+  },
+});
 
 function MyApp({ Component, pageProps }: any) {
   return (
@@ -16,7 +23,9 @@ function MyApp({ Component, pageProps }: any) {
             useSystemColorMode: true,
           }}
         >
-          <Component {...pageProps} />
+          <Hydrate state={pageProps.dehydratedState}>
+            <Component {...pageProps} />
+          </Hydrate>
         </ColorModeProvider>
       </ChakraProvider>
       {/* <ReactQueryDevtools initialIsOpen={true}></ReactQueryDevtools> */}

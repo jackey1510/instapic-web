@@ -1,56 +1,40 @@
 import {
-  Box,
-  Button,
+  Alert,
+  AlertIcon, Box,
   Flex,
   SimpleGrid,
   Skeleton,
   Spinner,
   useColorMode,
-  useMediaQuery,
+  useMediaQuery
 } from "@chakra-ui/react";
-import { AxiosResponse } from "axios";
-import React, { useState } from "react";
-import { useInfiniteQuery, useQuery } from "react-query";
-import { getPostsDto } from "../dto/request/get-posts.dto";
+import React from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useInfiniteQuery } from "react-query";
 import { PaginatedPostsDto } from "../dto/response/paginated-posts.dto";
-import { queryClient } from "../pages/_app";
-import { axiosQuery } from "../utils/axios";
+import { PostDto } from "../dto/response/post.dto";
+import { getPostQuery } from "../query/getPostsQuery";
 import { mainColor } from "../utils/colorScheme";
 import PhotoWidget from "./PhotoWidget";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { PostDto } from "../dto/response/post.dto";
 
-interface PostLayoutProps {}
+interface PostLayoutProps {
+}
 
-const PostLayout: React.FC<PostLayoutProps> = ({}) => {
-  const [cursor, setCursor] = useState<Date>();
+const PostLayout: React.FC<PostLayoutProps> = ({ }) => {
+  // console.log(initailPosts)
   const [isDesktop, isTablet] = useMediaQuery([
     "(min-width: 1000px)",
     "(min-width: 600px)",
   ]);
 
   const { colorMode } = useColorMode();
-  const limit = isDesktop ? 9 : isTablet ? 4 : 1;
+  const limit = isDesktop ? 9 : isTablet ? 4 : 3;
   const columns = isDesktop ? 3 : isTablet ? 2 : 1;
-  const height = isDesktop ? "250" : isTablet ? "350px" : "600px";
-  const width = isDesktop || isTablet ? "300px" : "400px";
+  const height = isDesktop ? 250 : isTablet ? 350 : 600;
+  const width = isDesktop || isTablet ? 300 : 400;
   const skeletons = [];
 
-  const getPostQuery = (cursor: Date) => {
-    // const cache = queryClient.getQueryData<AxiosResponse<PaginatedPostsDto>>([
-    //   "posts",
-    // ]);
-    // const cache = queryClient.getQueryCache();
-    // console.log("cache", cache);
-    // if (cache) {
-    //   return cache;
-    // }
-    return axiosQuery<PaginatedPostsDto>({
-      url: "/posts",
-      params: { limit, cursor } as getPostsDto,
-      method: "GET",
-    });
-  };
+
   for (let i = 1; i <= limit; i++) {
     skeletons.push(
       <Box key={"skeleton" + i}>
@@ -58,11 +42,16 @@ const PostLayout: React.FC<PostLayoutProps> = ({}) => {
       </Box>
     );
   }
-  //   const { data, isFetching } = useQuery(
-  //     ["posts", cursor, limit],
-  //     () => getPostQuery(cursor!, limit),
-  //     { keepPreviousData: true }
-  //   );
+  // const [cursor, setCursor] = React.useState<Date>();
+  // const { data, isFetching, error } = useQuery(
+  //   ["posts", cursor],
+  //   () => getPostQuery(cursor!),
+  //   {
+  //     keepPreviousData: true, behavior: () => {
+
+  //     }
+  //   }
+  // );
   const {
     data,
     error,
@@ -70,15 +59,16 @@ const PostLayout: React.FC<PostLayoutProps> = ({}) => {
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-    status,
-  } = useInfiniteQuery("posts", (context) => getPostQuery(context.pageParam), {
+  } = useInfiniteQuery<void | PaginatedPostsDto, Error>("posts", (context) => getPostQuery(context.pageParam), {
     getNextPageParam: (lastPage) => {
-      console.log(lastPage?.data.nextCursor);
-      return lastPage?.data.nextCursor;
-    },
+      if (lastPage)
+        return lastPage?.nextCursor;
+      return;
+    }, keepPreviousData: true,
+    // initialData: { pages: [initailPosts], pageParams: [] }
   });
   let body = null;
-  if (!data) {
+  if (isFetching && !isFetchingNextPage) {
     body = (
       <SimpleGrid columns={columns} minChildWidth="250px" spacing="40px">
         {skeletons}
@@ -86,31 +76,47 @@ const PostLayout: React.FC<PostLayoutProps> = ({}) => {
     );
   }
 
-  if (!isFetching && data && data.pages && data.pages && data.pages[0]) {
+  if (data && data.pages && data.pages[0]) {
+    // if (!isFetching && data) {
     let posts: PostDto[] = [];
+    // const hasNextPage = !!data.data.nextCursor;
+    // const fetchNextPage = () => setCursor(data.data.nextCursor!);
 
     data.pages.forEach((p) => {
       if (p) {
-        posts = posts.concat(p.data.posts);
+        posts = posts.concat(p.posts);
       }
     });
 
-    console.log(posts);
+    // console.log(posts);
 
-    const images = [];
 
-    for (let i = 0; i < posts.length; i++) {
+    const images: any[] = [];
+
+    posts.forEach(post => {
       images.push(
         <PhotoWidget
-          key={posts[i].fileName}
+          key={post.fileName}
           height={height}
           width={width}
-          post={posts[i]}
+          post={post}
         ></PhotoWidget>
       );
-    }
+    })
+
+
+
     body = (
       <>
+
+        <SimpleGrid columns={columns} minChildWidth="250px" spacing='20px'>
+          {images}
+        </SimpleGrid>
+
+        {/* {hasNextPage ?
+          <Flex mt={4} justifyContent='center' alignItems='stretch'>
+            <Button onClick={() => fetchNextPage()} isLoading={isFetchingNextPage}>Load More</Button>
+          </Flex> : null} */}
         <InfiniteScroll
           dataLength={posts.length}
           next={() => fetchNextPage()}
@@ -122,17 +128,17 @@ const PostLayout: React.FC<PostLayoutProps> = ({}) => {
               </Flex>
             ) : null
           }
+          scrollThreshold={0}
         >
-          <SimpleGrid columns={columns} minChildWidth="250px" spacing="40px">
-            {images}
-          </SimpleGrid>
         </InfiniteScroll>
-        {/* {hasNextPage ? (
-          <Button onClick={() => fetchNextPage()}>Load More</Button>
-        ) : null} */}
+
+        {error ? <Alert status="error">
+          <AlertIcon />
+          {error}
+        </Alert> : null}
       </>
     );
   }
-  return <>{body}</>;
-};
+  return body
+}
 export default PostLayout;

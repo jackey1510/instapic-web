@@ -4,6 +4,7 @@ import { accessTokenDto } from "../dto/response/access_token.dto";
 
 export let accessToken = "";
 export let expiryTime: Date;
+export let fetching = false;
 
 export const setAccessToken = (token: string) => {
   accessToken = token;
@@ -30,13 +31,17 @@ export const getAccessTokenUpdated = async () => {
 };
 
 export const refreshToken = async () => {
-  let res = await axiosQuery<accessTokenDto>({
-    url: "/auth/refresh-token",
-    method: "POST",
-  });
+  if (!fetching) {
+    fetching = true;
+    let res = await axiosQuery<accessTokenDto>({
+      url: "/auth/refresh-token",
+      method: "POST",
+    });
 
-  if (res) {
-    setAccessToken(res?.data?.accessToken);
+    if (res) {
+      setAccessToken(res?.data?.accessToken);
+    }
+    fetching = false;
   }
   return accessToken;
 };

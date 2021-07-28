@@ -79,7 +79,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
       <>
         <DrawerHeader borderBottomWidth="1px">
           <Text color={mainColor[colorMode]} mr={4}>
-            {data.data.username}
+            {data.username}
           </Text>
         </DrawerHeader>
         <DrawerBody>

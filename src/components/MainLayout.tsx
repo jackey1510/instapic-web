@@ -4,10 +4,6 @@ import Wrapper, { WrapperProps } from "./Wrapper";
 
 interface MainLayoutProps extends WrapperProps { }
 
-export async function getServerSideProps() {
-
-}
-
 export const MainLayout: React.FC<MainLayoutProps> = ({
   variant,
   children,
