@@ -5,28 +5,24 @@ import { Box, Button, Flex, Link } from "@chakra-ui/react";
 import InputField from "../components/InputField";
 
 import NextLink from "next/link";
-import { axiosQuery } from "../utils/axios";
 import { useMutation } from "react-query";
 import { useRouter } from "next/dist/client/router";
 import { toErrorMap } from "../utils/toErrorMap";
-import { setAccessToken } from "../utils/jwt";
+
 
 import { MainLayout } from "../components/MainLayout";
 import PasswordField from "../components/PasswordField";
 import { loginDto } from "../dto/request/login.dto";
+import { loginMutation } from "../query/loginMutation";
+import { useJwtAuth } from "../utils/useJwtAuth";
 
 interface loginProps { }
 
 export const Login: React.FC<loginProps> = ({ }) => {
   const router = useRouter();
-  const loginMutation = (values: loginDto) => {
-    return axiosQuery<{ accessToken: string }>({
-      url: "/auth/login",
-      data: values,
-      method: "POST",
-    });
-  };
+
   const { mutateAsync: login } = useMutation("register", loginMutation);
+  const { setAccessToken } = useJwtAuth();
 
   return (
     <MainLayout variant="small">

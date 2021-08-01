@@ -4,6 +4,7 @@ import "@fontsource/shadows-into-light";
 
 import theme from "../theme";
 import { Hydrate } from "react-query/hydration";
+import { isServer } from "../utils/isServer";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,7 +21,7 @@ function MyApp({ Component, pageProps }: any) {
       <ChakraProvider resetCSS theme={theme}>
         <ColorModeProvider
           options={{
-            useSystemColorMode: true,
+            useSystemColorMode: isServer() ? false : true,
           }}
         >
           <Hydrate state={pageProps.dehydratedState}>

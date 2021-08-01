@@ -28,7 +28,6 @@ import { DarkModeSwitch } from "./DarkModeSwitch";
 import { mainColor } from "../utils/colorScheme";
 
 interface HamburgerMenuProps { }
-
 export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
@@ -37,9 +36,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
 
   const { data, isFetching, isSuccess } = useMeQuery();
   const logoutMutation = () => {
-    return axiosQuery({ url: "/auth/logout", method: "DELETE" }).catch((err) =>
-      console.log(err)
-    );
+    return axiosQuery({ url: "/auth/logout", method: "DELETE" }).catch();
   };
   const { isLoading, mutateAsync: logout } = useMutation(
     "logout",

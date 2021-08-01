@@ -17,21 +17,25 @@ import { getPostQuery } from "../query/getPostsQuery";
 import { mainColor } from "../utils/colorScheme";
 import PhotoWidget from "./PhotoWidget";
 
+
 interface PostLayoutProps {
 }
 
 const PostLayout: React.FC<PostLayoutProps> = ({ }) => {
-  // console.log(initailPosts)
+
   const [isDesktop, isTablet] = useMediaQuery([
     "(min-width: 1000px)",
-    "(min-width: 600px)",
+    "(min-width: 650px)",
   ]);
+
+
 
   const { colorMode } = useColorMode();
   const limit = isDesktop ? 9 : isTablet ? 4 : 3;
   const columns = isDesktop ? 3 : isTablet ? 2 : 1;
   const height = isDesktop ? 250 : isTablet ? 350 : 600;
-  const width = isDesktop || isTablet ? 300 : 400;
+  const minWidth = isTablet ? 300 : 400;
+  const maxWidth = isTablet ? 300 : 500
   const skeletons = [];
 
 
@@ -42,16 +46,7 @@ const PostLayout: React.FC<PostLayoutProps> = ({ }) => {
       </Box>
     );
   }
-  // const [cursor, setCursor] = React.useState<Date>();
-  // const { data, isFetching, error } = useQuery(
-  //   ["posts", cursor],
-  //   () => getPostQuery(cursor!),
-  //   {
-  //     keepPreviousData: true, behavior: () => {
 
-  //     }
-  //   }
-  // );
   const {
     data,
     error,
@@ -77,18 +72,14 @@ const PostLayout: React.FC<PostLayoutProps> = ({ }) => {
   }
 
   if (data && data.pages && data.pages[0]) {
-    // if (!isFetching && data) {
     let posts: PostDto[] = [];
-    // const hasNextPage = !!data.data.nextCursor;
-    // const fetchNextPage = () => setCursor(data.data.nextCursor!);
+
 
     data.pages.forEach((p) => {
       if (p) {
         posts = posts.concat(p.posts);
       }
     });
-
-    // console.log(posts);
 
 
     const images: any[] = [];
@@ -98,7 +89,8 @@ const PostLayout: React.FC<PostLayoutProps> = ({ }) => {
         <PhotoWidget
           key={post.fileName}
           height={height}
-          width={width}
+          minWidth={minWidth}
+          maxWidth={maxWidth}
           post={post}
         ></PhotoWidget>
       );
@@ -108,8 +100,7 @@ const PostLayout: React.FC<PostLayoutProps> = ({ }) => {
 
     body = (
       <>
-
-        <SimpleGrid columns={columns} minChildWidth="250px" spacing='20px'>
+        <SimpleGrid minChildWidth={minWidth} spacing='20px'>
           {images}
         </SimpleGrid>
 
