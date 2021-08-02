@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     },
   };
 };
-const Index = () => {
+const Index: React.FC = () => {
   const { data, isFetching } = useMeQuery();
 
   return (

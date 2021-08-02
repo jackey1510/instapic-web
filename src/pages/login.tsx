@@ -17,7 +17,7 @@ import { useJwtAuth } from "../utils/useJwtAuth";
 
 interface loginProps {}
 
-export const Login: React.FC<loginProps> = ({}) => {
+export const Login: React.FC<loginProps> = () => {
   const router = useRouter();
 
   const { mutateAsync: login } = useMutation("register", loginMutation);

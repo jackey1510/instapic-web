@@ -60,7 +60,6 @@ const PostLayout: React.FC<PostLayoutProps> = ({}) => {
         return;
       },
       keepPreviousData: true,
-      // initialData: { pages: [initailPosts], pageParams: [] }
     }
   );
   let body = null;
