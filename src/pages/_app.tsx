@@ -10,7 +10,7 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      refetchOnMount: false
+      refetchOnMount: false,
     },
   },
 });
@@ -22,6 +22,7 @@ function MyApp({ Component, pageProps }: any) {
         <ColorModeProvider
           options={{
             useSystemColorMode: isServer() ? false : true,
+            initialColorMode: "dark",
           }}
         >
           <Hydrate state={pageProps.dehydratedState}>

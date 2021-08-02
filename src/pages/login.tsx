@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { Box, Button, Flex, Link, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Link } from "@chakra-ui/react";
 
 import InputField from "../components/InputField";
 
@@ -25,7 +25,6 @@ export const Login: React.FC<loginProps> = ({}) => {
 
   return (
     <MainLayout variant="small">
-      <Text size="3xl">Login to browse all amazing photos!</Text>
       <Formik
         initialValues={{ usernameOrEmail: "", password: "" }}
         onSubmit={async (values: loginDto, { setErrors }) => {
@@ -35,7 +34,7 @@ export const Login: React.FC<loginProps> = ({}) => {
 
           if (res && res.data) {
             setAccessToken(res.data.accessToken);
-            return router.push("/");
+            return router.push((router.query?.next as string) || "/");
           }
           return;
         }}
@@ -55,9 +54,9 @@ export const Login: React.FC<loginProps> = ({}) => {
               ></PasswordField>
             </Box>
             <Flex>
-              <NextLink href="/forgot-password">
+              <NextLink href="/register">
                 <Link mt={4} ml={"auto"}>
-                  Forget Password?
+                  New to Instapic?
                 </Link>
               </NextLink>
             </Flex>

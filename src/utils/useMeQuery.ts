@@ -25,5 +25,5 @@ export const useMeQuery = () => {
     return res ? res.data : res;
   };
 
-  return useQuery("me", meQuery, { retry: 0 });
+  return useQuery("me", meQuery, { refetchOnMount: true });
 };

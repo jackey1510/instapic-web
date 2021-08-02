@@ -27,8 +27,8 @@ import { useMeQuery } from "../utils/useMeQuery";
 import { DarkModeSwitch } from "./DarkModeSwitch";
 import { mainColor } from "../utils/colorScheme";
 
-interface HamburgerMenuProps { }
-export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
+interface HamburgerMenuProps {}
+export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
 
@@ -92,7 +92,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
                 await logout();
                 await queryClient.invalidateQueries(["me", { exact: "true" }]);
 
-                router.reload();
+                router.push("/login");
               }}
               isLoading={isLoading}
             >
