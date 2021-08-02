@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { Box, Button, Flex, Link } from "@chakra-ui/react";
+import { Box, Button, Flex, Link, Text } from "@chakra-ui/react";
 
 import InputField from "../components/InputField";
 
@@ -9,16 +9,15 @@ import { useMutation } from "react-query";
 import { useRouter } from "next/dist/client/router";
 import { toErrorMap } from "../utils/toErrorMap";
 
-
 import { MainLayout } from "../components/MainLayout";
 import PasswordField from "../components/PasswordField";
 import { loginDto } from "../dto/request/login.dto";
 import { loginMutation } from "../query/loginMutation";
 import { useJwtAuth } from "../utils/useJwtAuth";
 
-interface loginProps { }
+interface loginProps {}
 
-export const Login: React.FC<loginProps> = ({ }) => {
+export const Login: React.FC<loginProps> = ({}) => {
   const router = useRouter();
 
   const { mutateAsync: login } = useMutation("register", loginMutation);
@@ -26,6 +25,7 @@ export const Login: React.FC<loginProps> = ({ }) => {
 
   return (
     <MainLayout variant="small">
+      <Text size="3xl">Login to browse all amazing photos!</Text>
       <Formik
         initialValues={{ usernameOrEmail: "", password: "" }}
         onSubmit={async (values: loginDto, { setErrors }) => {
