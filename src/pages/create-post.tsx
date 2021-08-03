@@ -6,12 +6,11 @@ import {
   Box,
   Button,
   CloseButton,
-  Input,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/dist/client/router";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useMutation } from "react-query";
 import InputField from "../components/InputField";
 import { MainLayout } from "../components/MainLayout";
@@ -33,7 +32,6 @@ const createPost: React.FC<createPostProps> = ({ }) => {
     "createPost",
     createPostMutation
   );
-  const inputRef = useRef<HTMLInputElement>(null);
   const [inputFile, setInputFile] = useState<File>();
   const [uploadState, setUploadState] = useState<"error" | "success">();
 
@@ -59,8 +57,7 @@ const createPost: React.FC<createPostProps> = ({ }) => {
               return router.push("/");
             }
           }
-          setUploadState("error");
-          return;
+          return setUploadState("error");
         }}
       >
         {({ isSubmitting }) => (
@@ -68,25 +65,8 @@ const createPost: React.FC<createPostProps> = ({ }) => {
             <FileInput
               name="image"
               label="image"
+              setInputFile={setInputFile}
             >
-              <Input
-                type="file"
-                accept={"image/*"}
-                ref={inputRef}
-                onChange={(event) => {
-                  return setInputFile(event.target.files![0]);
-                }}
-                placeholder={"Choose an image"}
-                alignContent="center"
-              // style={{ display: "none" }}
-              ></Input>
-              {/* <Input
-                placeholder={"Choose an image" || "Your file ..."}
-                onClick={() => inputRef.current!.click()}
-                name={"image"}
-                id={"image"}
-                value={inputFile?.name}
-              /> */}
             </FileInput>
 
             <Box mt={4}>

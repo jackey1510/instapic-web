@@ -27,6 +27,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
               ? "800px"
               : "1000px"
         }
+        data-testid='wrapper'
         w="100%"
         my={4}
         mx="auto"
