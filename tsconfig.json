@@ -28,7 +28,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "test/**/*.ts",
-    "test/components/Wrapper.spec.tsx"
+	"test/**/*.tsx",
   ],
   "exclude": ["node_modules"],
   "typeRoots": ["./src/types", "./node_modules/@types/"]

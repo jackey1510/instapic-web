@@ -24,7 +24,7 @@ import { queryClient } from "../pages/_app";
 import { axiosQuery } from "../utils/axios";
 
 import { useMeQuery } from "../utils/useMeQuery";
-import { DarkModeSwitch } from "./DarkModeSwitch";
+import DarkModeSwitch from "./DarkModeSwitch";
 import { mainColor } from "../utils/colorScheme";
 
 interface HamburgerMenuProps {}
