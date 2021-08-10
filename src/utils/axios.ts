@@ -1,4 +1,4 @@
-import { useJwtAuth } from "./useJwtAuth";
+import { useJwtAuth } from "../hooks/useJwtAuth";
 
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 

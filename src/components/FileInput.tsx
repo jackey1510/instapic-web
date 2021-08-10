@@ -15,7 +15,7 @@ import { useField } from "formik";
 type FileInputProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string;
   name: string;
-  setInputFile: (value: React.SetStateAction<File | undefined>) => void
+  setInputFile: (value: File) => void
 };
 
 const FileInput: React.FC<FileInputProps> = ({
@@ -33,6 +33,7 @@ const FileInput: React.FC<FileInputProps> = ({
         <InputGroup>
           <InputLeftElement pointerEvents="none" children={<AttachmentIcon />} />
           <Input
+            data-testid='fileSelect'
             type="file"
             accept={"image/*"}
             onChange={(event) => {

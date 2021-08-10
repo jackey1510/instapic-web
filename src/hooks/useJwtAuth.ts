@@ -1,4 +1,4 @@
-import { axiosQuery } from "./axios";
+import { axiosQuery } from "../utils/axios";
 import { decode, JwtPayload } from "jsonwebtoken";
 import { accessTokenDto } from "../dto/response/access_token.dto";
 

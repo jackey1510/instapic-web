@@ -13,9 +13,9 @@ import { MainLayout } from "../components/MainLayout";
 import PasswordField from "../components/PasswordField";
 import { loginDto } from "../dto/request/login.dto";
 import { loginMutation } from "../query/loginMutation";
-import { useJwtAuth } from "../utils/useJwtAuth";
+import { useJwtAuth } from "../hooks/useJwtAuth";
 
-interface loginProps {}
+interface loginProps { }
 
 export const Login: React.FC<loginProps> = () => {
   const router = useRouter();

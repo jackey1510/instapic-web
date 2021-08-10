@@ -35,7 +35,7 @@ const PhotoWidget: React.FC<PhotoWidgetProps> = ({ post, height, minWidth, maxWi
           <Text mx={1} mb={2} fontSize="xl">
             {post.username}
           </Text>
-          <Box maxW={maxWidth}>
+          <Box maxW={maxWidth} >
             <IKImage
               urlEndpoint={process.env.NEXT_PUBLIC_IMAGEKIT_URL}
               path={post.fileName}
@@ -45,6 +45,7 @@ const PhotoWidget: React.FC<PhotoWidgetProps> = ({ post, height, minWidth, maxWi
                   width: maxWidth,
                 },
               ]}
+              alt={post.text}
             ></IKImage>
           </Box>
           <Text maxW={maxWidth - textMargin} mt={2} mx={1} isTruncated overflowX="hidden">{post.text}</Text>

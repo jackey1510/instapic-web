@@ -15,7 +15,7 @@ import { useMutation } from "react-query";
 import InputField from "../components/InputField";
 import { MainLayout } from "../components/MainLayout";
 import { toErrorMap } from "../utils/toErrorMap";
-import { useIsAuth } from "../utils/useIsAuth";
+import { useIsAuth } from "../hooks/useIsAuth";
 import FileInput from "../components/FileInput";
 import { uploadPhotosToSignedUrl } from "../utils/uploadPhotos";
 import InputSwitch from "../components/InputSwitch";

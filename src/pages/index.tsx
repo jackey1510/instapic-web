@@ -5,7 +5,7 @@ import { GetServerSideProps } from "next";
 import { queryClient } from "./_app";
 import { dehydrate } from "react-query/hydration";
 import { getPostQuery } from "../query/getPostsQuery";
-import { useMeQuery } from "../utils/useMeQuery";
+import { useMeQuery } from "../hooks/useMeQuery";
 import { Flex, Spinner } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 
@@ -34,10 +34,10 @@ const Index: React.FC = () => {
       {data ? (
         <PostLayout />
       ) : (
-        <Text fontSize="xl" mb={4}>
-          Login to browse all amazing photos!
-        </Text>
-      )}
+          <Text fontSize="xl" mb={4}>
+            Login to browse all amazing photos!
+          </Text>
+        )}
     </MainLayout>
   );
 };
