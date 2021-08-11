@@ -21,24 +21,21 @@ import NLink from "next/link";
 import React from "react";
 import { useMutation } from "react-query";
 import { queryClient } from "../pages/_app";
-import { axiosQuery } from "../utils/axios";
 
 import { useMeQuery } from "../hooks/useMeQuery";
 import DarkModeSwitch from "./DarkModeSwitch";
 import { mainColor } from "../utils/colorScheme";
+import { logoutMutation } from "../query/logoutMutation";
 
-interface HamburgerMenuProps { }
-export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
+interface HamburgerMenuProps {}
+export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
 
   const { colorMode } = useColorMode();
 
   const { data, isFetching, isSuccess } = useMeQuery();
-  console.log('is fetching', isFetching)
-  const logoutMutation = () => {
-    return axiosQuery({ url: "/auth/logout", method: "DELETE" }).catch();
-  };
+
   const { isLoading, mutateAsync: logout } = useMutation(
     "logout",
     logoutMutation,
@@ -49,7 +46,6 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
   if (isFetching) {
     body = <Box></Box>;
   }
-
   if (!data && isSuccess) {
     body = (
       <>
@@ -105,7 +101,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
   }
 
   return (
-    <Box data-testid='hamburgerMenu'>
+    <Box data-testid="hamburgerMenu">
       <IconButton
         aria-label="Hamburger"
         icon={<HamburgerIcon />}
@@ -116,7 +112,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
       </IconButton>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent data-testid="drawerOverlay">
           <DrawerCloseButton color={mainColor[colorMode]} />
           {body}
           <DrawerFooter>
