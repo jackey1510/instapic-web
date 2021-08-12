@@ -3,45 +3,45 @@ import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Form, Formik } from "formik";
 import { act } from "react-dom/test-utils";
-import InputField from "../../src/components/InputField";
+import PasswordField from "../../src/components/PasswordField";
 
-describe("InputField", () => {
+describe("PasswordField", () => {
   beforeEach(() => {});
 
   it("renders", () => {
     render(
       <Formik initialValues={{}} onSubmit={() => {}}>
         <Form>
-          <InputField label="text" name="text" />
+          <PasswordField label="password" name="password" />
           <Button type="submit">submit</Button>
         </Form>
       </Formik>
     );
 
-    expect(screen.getByTestId("inputField")).toBeDefined();
-    expect(screen.getByText("text")).toBeDefined();
+    expect(screen.getByTestId("passwordField")).toBeDefined();
+    expect(screen.getByText("password")).toBeDefined();
   });
 
   it("raise error when there is no input", async () => {
     render(
       <Formik
-        initialValues={{ text: "" }}
+        initialValues={{ password: "" }}
         onSubmit={(values, { setErrors }) => {
-          if (!values.text) {
+          if (!values.password) {
             setErrors({
-              text: "error",
+              password: "error",
             });
           }
         }}
       >
         <Form>
-          <InputField label="text" name="text" />
+          <PasswordField label="password" name="password" />
           <Button type="submit">submit</Button>
         </Form>
       </Formik>
     );
     await act(async () => {
-      fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByText("submit"));
       const errorMessage = await screen.findByTestId("formErrorMessage");
       expect(errorMessage).toBeDefined();
       expect(errorMessage.textContent).toEqual("error");
@@ -52,25 +52,42 @@ describe("InputField", () => {
     let result: string;
     render(
       <Formik
-        initialValues={{ text: "" }}
-        onSubmit={(values: { text: string }) => {
-          result = values.text;
+        initialValues={{ password: "" }}
+        onSubmit={(values: { password: string }) => {
+          result = values.password;
         }}
       >
         <Form>
-          <InputField label="text" name="text" />
+          <PasswordField label="password" name="password" />
           <Button type="submit">submit</Button>
         </Form>
       </Formik>
     );
     await act(async () => {
       await waitFor(() => {
-        fireEvent.change(screen.getByTestId("inputText"), {
+        fireEvent.change(screen.getByTestId("passwordInput"), {
           target: { value: "something" },
         });
-        fireEvent.click(screen.getByRole("button"));
+        fireEvent.click(screen.getByText("submit"));
         expect(result).toEqual("something");
       });
     });
+  });
+  it("hide/show password", async () => {
+    render(
+      <Formik initialValues={{}} onSubmit={() => {}}>
+        <Form>
+          <PasswordField label="password" name="password" />
+          <Button type="submit">submit</Button>
+        </Form>
+      </Formik>
+    );
+    const passwordInput = screen.getByTestId(
+      "passwordInput"
+    ) as HTMLInputElement;
+    expect(passwordInput.type).toEqual("password");
+
+    fireEvent.click(screen.getByText("Show"));
+    expect(passwordInput.type).toEqual("text");
   });
 });

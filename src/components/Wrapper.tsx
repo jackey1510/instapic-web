@@ -24,10 +24,10 @@ export const Wrapper: React.FC<WrapperProps> = ({
           variant === "small"
             ? "400px"
             : variant === "regular"
-              ? "800px"
-              : "1000px"
+            ? "800px"
+            : "1000px"
         }
-        data-testid='wrapper'
+        data-testid="wrapper"
         w="100%"
         my={4}
         mx="auto"
