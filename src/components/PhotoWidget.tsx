@@ -1,4 +1,11 @@
-import { Box, Flex, Text, useColorMode, useDisclosure, Link } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Text,
+  useColorMode,
+  useDisclosure,
+  Link,
+} from "@chakra-ui/react";
 import { IKImage } from "imagekitio-react";
 import React from "react";
 import { PostDto } from "../dto/response/post.dto";
@@ -10,14 +17,18 @@ interface PhotoWidgetProps {
   post: PostDto;
   height: number;
   minWidth: number;
-  maxWidth: number
-
+  maxWidth: number;
 }
 
-const PhotoWidget: React.FC<PhotoWidgetProps> = ({ post, height, minWidth, maxWidth }) => {
+const PhotoWidget: React.FC<PhotoWidgetProps> = ({
+  post,
+  height,
+  minWidth,
+  maxWidth,
+}) => {
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const textMargin = isServer() ? 125 : 50
+  const textMargin = isServer() ? 125 : 50;
 
   return (
     <>
@@ -30,12 +41,13 @@ const PhotoWidget: React.FC<PhotoWidgetProps> = ({ post, height, minWidth, maxWi
         onClick={onOpen}
         as={Link}
         minW={minWidth}
+        data-testid="photoWidget"
       >
         <Box my={4} maxW={maxWidth}>
           <Text mx={1} mb={2} fontSize="xl">
             {post.username}
           </Text>
-          <Box maxW={maxWidth} >
+          <Box maxW={maxWidth}>
             <IKImage
               urlEndpoint={process.env.NEXT_PUBLIC_IMAGEKIT_URL}
               path={post.fileName}
@@ -48,12 +60,19 @@ const PhotoWidget: React.FC<PhotoWidgetProps> = ({ post, height, minWidth, maxWi
               alt={post.text}
             ></IKImage>
           </Box>
-          <Text maxW={maxWidth - textMargin} mt={2} mx={1} isTruncated overflowX="hidden">{post.text}</Text>
+          <Text
+            maxW={maxWidth - textMargin}
+            mt={2}
+            mx={1}
+            isTruncated
+            overflowX="hidden"
+          >
+            {post.text}
+          </Text>
         </Box>
-
       </Flex>
       <PhotoModal isOpen={isOpen} onClose={onClose} post={post}>
-        <Flex alignItems='stretch' justifyContent='center'>
+        <Flex alignItems="stretch" justifyContent="center">
           <IKImage
             urlEndpoint={process.env.NEXT_PUBLIC_IMAGEKIT_URL}
             path={post.fileName}

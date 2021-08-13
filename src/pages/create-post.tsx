@@ -21,9 +21,9 @@ import { uploadPhotosToSignedUrl } from "../utils/uploadPhotos";
 import InputSwitch from "../components/InputSwitch";
 import { createPostMutation } from "../query/createPostMutation";
 
-interface createPostProps { }
+interface createPostProps {}
 
-const createPost: React.FC<createPostProps> = ({ }) => {
+const createPost: React.FC<createPostProps> = ({}) => {
   useIsAuth();
 
   const router = useRouter();
@@ -66,8 +66,7 @@ const createPost: React.FC<createPostProps> = ({ }) => {
               name="image"
               label="image"
               setInputFile={setInputFile}
-            >
-            </FileInput>
+            ></FileInput>
 
             <Box mt={4}>
               <InputField
@@ -99,7 +98,12 @@ const createPost: React.FC<createPostProps> = ({ }) => {
           <AlertIcon />
           <AlertTitle mr={2}>Upload Failed!</AlertTitle>
           <AlertDescription>Your input is invalid.</AlertDescription>
-          <CloseButton position="absolute" right="8px" top="8px" onClick={() => setUploadState(undefined)} />
+          <CloseButton
+            position="absolute"
+            right="8px"
+            top="8px"
+            onClick={() => setUploadState(undefined)}
+          />
         </Alert>
       ) : uploadState === "success" ? (
         <Alert status={uploadState} variant="subtle" mt={4}>

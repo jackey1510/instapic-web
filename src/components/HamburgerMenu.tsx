@@ -16,21 +16,20 @@ import {
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useRouter } from "next/dist/client/router";
+
 import NLink from "next/link";
 import React from "react";
 import { useMutation } from "react-query";
-import { queryClient } from "../pages/_app";
 
 import { useMeQuery } from "../hooks/useMeQuery";
 import DarkModeSwitch from "./DarkModeSwitch";
 import { mainColor } from "../utils/colorScheme";
 import { logoutMutation } from "../query/logoutMutation";
+import { LogOutButton } from "./LogOutButton";
 
 interface HamburgerMenuProps {}
 export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
 
   const { colorMode } = useColorMode();
 
@@ -83,17 +82,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({}) => {
                 Create Post
               </Button>
             </NLink>
-            <Button
-              variant="link"
-              onClick={async () => {
-                await logout();
-                await queryClient.invalidateQueries(["me", { exact: "true" }]);
-                router.push("/login");
-              }}
-              isLoading={isLoading}
-            >
-              Sign Out
-            </Button>
+            <LogOutButton logout={logout} isLoading={isLoading} />
           </Stack>
         </DrawerBody>
       </>

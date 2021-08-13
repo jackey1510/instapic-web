@@ -10,15 +10,20 @@ import PasswordField from "../components/PasswordField";
 import { createUserDto } from "../dto/request/create-user.dto";
 import { registerMutation } from "../query/registerMutation";
 
-interface registerProps { }
-export const Register: React.FC<registerProps> = ({ }) => {
+interface registerProps {}
+export const Register: React.FC<registerProps> = ({}) => {
   const router = useRouter();
 
   const { mutateAsync: register } = useMutation("register", registerMutation);
   return (
     <MainLayout variant="small">
       <Formik
-        initialValues={{ username: "", password: "", email: "", passwordConfirm: "" }}
+        initialValues={{
+          username: "",
+          password: "",
+          email: "",
+          passwordConfirm: "",
+        }}
         onSubmit={async (values: createUserDto, { setErrors }) => {
           await register(values, {
             onSuccess: () => {

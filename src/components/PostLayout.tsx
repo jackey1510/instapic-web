@@ -12,10 +12,8 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 // import InfiniteScroll from "react-infinite-scroll-component";
-import { useInfiniteQuery } from "react-query";
-import { PaginatedPostsDto } from "../dto/response/paginated-posts.dto";
 import { PostDto } from "../dto/response/post.dto";
-import { getPostQuery } from "../query/getPostsQuery";
+import { useInfinitePostQuery } from "../hooks/useInfinitePostQuery";
 import { mainColor } from "../utils/colorScheme";
 import PhotoWidget from "./PhotoWidget";
 
@@ -51,17 +49,7 @@ const PostLayout: React.FC<PostLayoutProps> = ({}) => {
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-  } = useInfiniteQuery<void | PaginatedPostsDto, Error>(
-    "posts",
-    (context) => getPostQuery(context.pageParam),
-    {
-      getNextPageParam: (lastPage) => {
-        if (lastPage) return lastPage?.nextCursor;
-        return;
-      },
-      keepPreviousData: true,
-    }
-  );
+  } = useInfinitePostQuery();
   let body = null;
   if (isFetching && !isFetchingNextPage) {
     body = (
@@ -95,7 +83,7 @@ const PostLayout: React.FC<PostLayoutProps> = ({}) => {
     });
 
     body = (
-      <>
+      <Box data-testid="postLayout">
         <SimpleGrid minChildWidth={minWidth} spacing="20px">
           {images}
         </SimpleGrid>
@@ -131,7 +119,7 @@ const PostLayout: React.FC<PostLayoutProps> = ({}) => {
             {error}
           </Alert>
         ) : null}
-      </>
+      </Box>
     );
   }
   return body;

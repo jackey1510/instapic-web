@@ -12,7 +12,6 @@ const query = axios.create({
 });
 
 export const axiosQuery = async <T = any>(config: AxiosRequestConfig) => {
-  console.log("axios config", config);
   const { getAccessTokenUpdated } = useJwtAuth();
   return new Promise<AxiosResponse<T> | void>(async (resolve, reject) => {
     config = {

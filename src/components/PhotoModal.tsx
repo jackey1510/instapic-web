@@ -27,14 +27,9 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
 }) => {
   const { colorMode } = useColorMode();
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      size="4xl"
-      data-testid="photoModal"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} size="4xl">
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent data-testid="photoModal">
         <ModalHeader color={mainColor[colorMode]}>{post.username}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>{children}</ModalBody>

@@ -34,10 +34,10 @@ const Index: React.FC = () => {
       {data ? (
         <PostLayout />
       ) : (
-          <Text fontSize="xl" mb={4}>
-            Login to browse all amazing photos!
-          </Text>
-        )}
+        <Text fontSize="xl" mb={4}>
+          Login to browse all amazing photos!
+        </Text>
+      )}
     </MainLayout>
   );
 };
