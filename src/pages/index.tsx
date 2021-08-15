@@ -1,13 +1,10 @@
-import React from "react";
-import { MainLayout } from "../components/MainLayout";
-import PostLayout from "../components/PostLayout";
 import { GetServerSideProps } from "next";
-import { queryClient } from "./_app";
+import React from "react";
 import { dehydrate } from "react-query/hydration";
+import { Home } from "../components/Home";
+import { MainLayout } from "../components/MainLayout";
 import { getPostQuery } from "../query/getPostsQuery";
-import { useMeQuery } from "../hooks/useMeQuery";
-import { Flex, Spinner } from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
+import { queryClient } from "./_app";
 
 // SSR for homepage
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -22,22 +19,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 const Index: React.FC = () => {
-  const { data, isFetching } = useMeQuery();
-
   return (
     <MainLayout variant="large">
-      {isFetching ? (
-        <Flex justifyContent="center" alignItems="stretch">
-          <Spinner size="xl" />
-        </Flex>
-      ) : null}
-      {data ? (
-        <PostLayout />
-      ) : (
-        <Text fontSize="xl" mb={4}>
-          Login to browse all amazing photos!
-        </Text>
-      )}
+      <Home />
     </MainLayout>
   );
 };
