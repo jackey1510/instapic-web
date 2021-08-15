@@ -1,12 +1,12 @@
-import { axiosQuery } from "./axios";
+import { axiosQuery } from "../utils/axios";
 import { decode, JwtPayload } from "jsonwebtoken";
 import { accessTokenDto } from "../dto/response/access_token.dto";
 
-export let accessToken = "";
-export let expiryTime: Date;
-export let fetching = false;
+let accessToken = "";
+let expiryTime: Date;
+let fetching = false;
 
-export const setAccessToken = (token: string) => {
+const setAccessToken = (token: string) => {
   accessToken = token;
   let payload = decode(accessToken);
   if (payload) {
@@ -14,23 +14,21 @@ export const setAccessToken = (token: string) => {
     return;
   }
   expiryTime = new Date(0);
+  return;
 };
 
-export const getAccessToken = () => {
+const getAccessToken = () => {
   return accessToken;
 };
 
-export const getAccessTokenUpdated = async () => {
-  if (!accessToken) {
-    return "";
-  }
-  if (new Date() > expiryTime) {
-    accessToken = await refreshToken();
+const getAccessTokenUpdated = async () => {
+  if (new Date() > expiryTime || !accessToken) {
+    await refreshAccessToken();
   }
   return accessToken;
 };
 
-export const refreshToken = async () => {
+const refreshAccessToken = async () => {
   if (!fetching) {
     fetching = true;
     let res = await axiosQuery<accessTokenDto>({
@@ -39,9 +37,18 @@ export const refreshToken = async () => {
     });
 
     if (res) {
-      setAccessToken(res?.data?.accessToken);
+      setAccessToken(res.data.accessToken);
     }
     fetching = false;
   }
   return accessToken;
+};
+
+export const useJwtAuth = () => {
+  return {
+    setAccessToken,
+    getAccessToken,
+    refreshAccessToken,
+    getAccessTokenUpdated,
+  };
 };

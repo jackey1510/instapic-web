@@ -1,18 +1,18 @@
+import { Box } from "@chakra-ui/react";
 import React from "react";
 import NavBar from "./NavBar";
 import Wrapper, { WrapperProps } from "./Wrapper";
 
-interface MainLayoutProps extends WrapperProps { }
+interface MainLayoutProps extends WrapperProps {}
 
 export const MainLayout: React.FC<MainLayoutProps> = ({
   variant,
   children,
 }) => {
-
   return (
-    <>
+    <Box data-testid="mainLayout">
       <NavBar />
-      <Wrapper variant={variant} >{children}</Wrapper>
-    </>
+      <Wrapper variant={variant}>{children}</Wrapper>
+    </Box>
   );
 };

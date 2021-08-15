@@ -1,4 +1,11 @@
-import { Box, Flex, Text, useColorMode, useDisclosure, Link } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Text,
+  useColorMode,
+  useDisclosure,
+  Link,
+} from "@chakra-ui/react";
 import { IKImage } from "imagekitio-react";
 import React from "react";
 import { PostDto } from "../dto/response/post.dto";
@@ -9,13 +16,20 @@ import { isServer } from "../utils/isServer";
 interface PhotoWidgetProps {
   post: PostDto;
   height: number;
-  width: number;
+  minWidth: number;
+  maxWidth: number;
 }
 
-const PhotoWidget: React.FC<PhotoWidgetProps> = ({ post, height, width }) => {
+const PhotoWidget: React.FC<PhotoWidgetProps> = ({
+  post,
+  height,
+  minWidth,
+  maxWidth,
+}) => {
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const textMargin = isServer() ? 125 : 50
+  const textMargin = isServer() ? 125 : 50;
+
   return (
     <>
       <Flex
@@ -26,31 +40,39 @@ const PhotoWidget: React.FC<PhotoWidgetProps> = ({ post, height, width }) => {
         bgColor={widgetBgColor[colorMode]}
         onClick={onOpen}
         as={Link}
-
+        minW={minWidth}
+        data-testid="photoWidget"
       >
-        <Box my={4} maxW={width}>
+        <Box my={4} maxW={maxWidth}>
           <Text mx={1} mb={2} fontSize="xl">
             {post.username}
           </Text>
-          <Box>
+          <Box maxW={maxWidth}>
             <IKImage
               urlEndpoint={process.env.NEXT_PUBLIC_IMAGEKIT_URL}
               path={post.fileName}
               transformation={[
                 {
                   height: height,
-                  width: width,
+                  width: maxWidth,
                 },
               ]}
+              alt={post.text}
             ></IKImage>
           </Box>
-          <Text width={width - textMargin} mt={2} mx={1} isTruncated>{post.text}</Text>
-
+          <Text
+            maxW={maxWidth - textMargin}
+            mt={2}
+            mx={1}
+            isTruncated
+            overflowX="hidden"
+          >
+            {post.text}
+          </Text>
         </Box>
-
       </Flex>
       <PhotoModal isOpen={isOpen} onClose={onClose} post={post}>
-        <Flex alignItems='stretch' justifyContent='center'>
+        <Flex alignItems="stretch" justifyContent="center">
           <IKImage
             urlEndpoint={process.env.NEXT_PUBLIC_IMAGEKIT_URL}
             path={post.fileName}

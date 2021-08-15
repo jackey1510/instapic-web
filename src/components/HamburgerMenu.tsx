@@ -16,31 +16,25 @@ import {
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useRouter } from "next/dist/client/router";
+
 import NLink from "next/link";
 import React from "react";
 import { useMutation } from "react-query";
-import { queryClient } from "../pages/_app";
-import { axiosQuery } from "../utils/axios";
 
-import { useMeQuery } from "../utils/useMeQuery";
-import { DarkModeSwitch } from "./DarkModeSwitch";
+import { useMeQuery } from "../hooks/useMeQuery";
+import DarkModeSwitch from "./DarkModeSwitch";
 import { mainColor } from "../utils/colorScheme";
+import { logoutMutation } from "../query/logoutMutation";
+import { LogOutButton } from "./LogOutButton";
 
-interface HamburgerMenuProps { }
-
-export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
+interface HamburgerMenuProps {}
+export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
 
   const { colorMode } = useColorMode();
 
   const { data, isFetching, isSuccess } = useMeQuery();
-  const logoutMutation = () => {
-    return axiosQuery({ url: "/auth/logout", method: "DELETE" }).catch((err) =>
-      console.log(err)
-    );
-  };
+
   const { isLoading, mutateAsync: logout } = useMutation(
     "logout",
     logoutMutation,
@@ -51,7 +45,6 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
   if (isFetching) {
     body = <Box></Box>;
   }
-
   if (!data && isSuccess) {
     body = (
       <>
@@ -89,18 +82,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
                 Create Post
               </Button>
             </NLink>
-            <Button
-              variant="link"
-              onClick={async () => {
-                await logout();
-                await queryClient.invalidateQueries(["me", { exact: "true" }]);
-
-                router.reload();
-              }}
-              isLoading={isLoading}
-            >
-              Sign Out
-            </Button>
+            <LogOutButton logout={logout} isLoading={isLoading} />
           </Stack>
         </DrawerBody>
       </>
@@ -108,7 +90,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
   }
 
   return (
-    <>
+    <Box data-testid="hamburgerMenu">
       <IconButton
         aria-label="Hamburger"
         icon={<HamburgerIcon />}
@@ -119,7 +101,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
       </IconButton>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent data-testid="drawerOverlay">
           <DrawerCloseButton color={mainColor[colorMode]} />
           {body}
           <DrawerFooter>
@@ -127,7 +109,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ }) => {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-    </>
+    </Box>
   );
 };
 export default HamburgerMenu;

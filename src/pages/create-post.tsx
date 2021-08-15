@@ -1,26 +1,21 @@
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
   Box,
-  Button,
-  CloseButton,
-  Input,
+  Button
 } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
-
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useMutation } from "react-query";
-import InputField from "../components/InputField";
-import { MainLayout } from "../components/MainLayout";
-import { toErrorMap } from "../utils/toErrorMap";
-import { useIsAuth } from "../utils/useIsAuth";
+import CreatePostAlert from "../components/CreatePostAlert";
 import FileInput from "../components/FileInput";
-import { uploadPhotosToSignedUrl } from "../utils/uploadPhotos";
+import InputField from "../components/InputField";
 import InputSwitch from "../components/InputSwitch";
+import { MainLayout } from "../components/MainLayout";
+import { useIsAuth } from "../hooks/useIsAuth";
 import { createPostMutation } from "../query/createPostMutation";
+import { toErrorMap } from "../utils/toErrorMap";
+import { uploadPhotosToSignedUrl } from "../utils/uploadPhotos";
+
 
 interface createPostProps { }
 
@@ -33,7 +28,6 @@ const createPost: React.FC<createPostProps> = ({ }) => {
     "createPost",
     createPostMutation
   );
-  const inputRef = useRef<HTMLInputElement>(null);
   const [inputFile, setInputFile] = useState<File>();
   const [uploadState, setUploadState] = useState<"error" | "success">();
 
@@ -59,8 +53,7 @@ const createPost: React.FC<createPostProps> = ({ }) => {
               return router.push("/");
             }
           }
-          setUploadState("error");
-          return;
+          return setUploadState("error");
         }}
       >
         {({ isSubmitting }) => (
@@ -68,26 +61,8 @@ const createPost: React.FC<createPostProps> = ({ }) => {
             <FileInput
               name="image"
               label="image"
-            >
-              <Input
-                type="file"
-                accept={"image/*"}
-                ref={inputRef}
-                onChange={(event) => {
-                  return setInputFile(event.target.files![0]);
-                }}
-                placeholder={"Choose an image"}
-                alignContent="center"
-              // style={{ display: "none" }}
-              ></Input>
-              {/* <Input
-                placeholder={"Choose an image" || "Your file ..."}
-                onClick={() => inputRef.current!.click()}
-                name={"image"}
-                id={"image"}
-                value={inputFile?.name}
-              /> */}
-            </FileInput>
+              setInputFile={setInputFile}
+            ></FileInput>
 
             <Box mt={4}>
               <InputField
@@ -114,19 +89,7 @@ const createPost: React.FC<createPostProps> = ({ }) => {
           </Form>
         )}
       </Formik>
-      {uploadState === "error" ? (
-        <Alert status={uploadState} mt={4}>
-          <AlertIcon />
-          <AlertTitle mr={2}>Upload Failed!</AlertTitle>
-          <AlertDescription>Your input is invalid.</AlertDescription>
-          <CloseButton position="absolute" right="8px" top="8px" onClick={() => setUploadState(undefined)} />
-        </Alert>
-      ) : uploadState === "success" ? (
-        <Alert status={uploadState} variant="subtle" mt={4}>
-          <AlertIcon />
-          Data uploaded to the server.
-        </Alert>
-      ) : null}
+      <CreatePostAlert setUploadState={setUploadState} uploadState={uploadState} />
     </MainLayout>
   );
 };

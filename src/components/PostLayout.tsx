@@ -1,57 +1,35 @@
 import {
   Alert,
-  AlertIcon, Box,
-  Flex,
+  AlertIcon,
+  Box,
   SimpleGrid,
   Skeleton,
-  Spinner,
   useColorMode,
-  useMediaQuery
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { useInfiniteQuery } from "react-query";
-import { PaginatedPostsDto } from "../dto/response/paginated-posts.dto";
 import { PostDto } from "../dto/response/post.dto";
-import { getPostQuery } from "../query/getPostsQuery";
+import { useInfinitePostQuery } from "../hooks/useInfinitePostQuery";
 import { mainColor } from "../utils/colorScheme";
+import { LoadMoreButton } from "./LoadMoreButton";
 import PhotoWidget from "./PhotoWidget";
 
-interface PostLayoutProps {
-}
+interface PostLayoutProps { }
 
 const PostLayout: React.FC<PostLayoutProps> = ({ }) => {
-  // console.log(initailPosts)
   const [isDesktop, isTablet] = useMediaQuery([
     "(min-width: 1000px)",
-    "(min-width: 600px)",
+    "(min-width: 650px)",
   ]);
 
   const { colorMode } = useColorMode();
   const limit = isDesktop ? 9 : isTablet ? 4 : 3;
   const columns = isDesktop ? 3 : isTablet ? 2 : 1;
   const height = isDesktop ? 250 : isTablet ? 350 : 600;
-  const width = isDesktop || isTablet ? 300 : 400;
+  const minWidth = isTablet ? 300 : 250;
+  const maxWidth = isTablet ? 300 : 500;
   const skeletons = [];
 
-
-  for (let i = 1; i <= limit; i++) {
-    skeletons.push(
-      <Box key={"skeleton" + i}>
-        <Skeleton height={height} color={mainColor[colorMode]} />
-      </Box>
-    );
-  }
-  // const [cursor, setCursor] = React.useState<Date>();
-  // const { data, isFetching, error } = useQuery(
-  //   ["posts", cursor],
-  //   () => getPostQuery(cursor!),
-  //   {
-  //     keepPreviousData: true, behavior: () => {
-
-  //     }
-  //   }
-  // );
   const {
     data,
     error,
@@ -59,86 +37,73 @@ const PostLayout: React.FC<PostLayoutProps> = ({ }) => {
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-  } = useInfiniteQuery<void | PaginatedPostsDto, Error>("posts", (context) => getPostQuery(context.pageParam), {
-    getNextPageParam: (lastPage) => {
-      if (lastPage)
-        return lastPage?.nextCursor;
-      return;
-    }, keepPreviousData: true,
-    // initialData: { pages: [initailPosts], pageParams: [] }
-  });
+  } = useInfinitePostQuery();
   let body = null;
   if (isFetching && !isFetchingNextPage) {
+    //loading skeletons
+    for (let i = 1; i <= limit; i++) {
+      skeletons.push(
+        <Skeleton
+          height={height}
+          color={mainColor[colorMode]}
+          key={"skeleton" + i}
+        />
+      );
+    }
     body = (
-      <SimpleGrid columns={columns} minChildWidth="250px" spacing="40px">
+      <SimpleGrid
+        columns={columns}
+        minChildWidth="250px"
+        spacing="40px"
+        data-testid="skeletons"
+      >
         {skeletons}
       </SimpleGrid>
     );
   }
 
   if (data && data.pages && data.pages[0]) {
-    // if (!isFetching && data) {
     let posts: PostDto[] = [];
-    // const hasNextPage = !!data.data.nextCursor;
-    // const fetchNextPage = () => setCursor(data.data.nextCursor!);
-
     data.pages.forEach((p) => {
       if (p) {
         posts = posts.concat(p.posts);
       }
     });
 
-    // console.log(posts);
-
-
     const images: any[] = [];
 
-    posts.forEach(post => {
-      images.push(
+    posts.forEach((post) => {
+      return images.push(
         <PhotoWidget
           key={post.fileName}
           height={height}
-          width={width}
+          minWidth={minWidth}
+          maxWidth={maxWidth}
           post={post}
         ></PhotoWidget>
       );
-    })
-
-
+    });
 
     body = (
-      <>
-
-        <SimpleGrid columns={columns} minChildWidth="250px" spacing='20px'>
+      <Box data-testid="postLayout">
+        <SimpleGrid minChildWidth={minWidth} spacing="20px">
           {images}
         </SimpleGrid>
-
-        {/* {hasNextPage ?
-          <Flex mt={4} justifyContent='center' alignItems='stretch'>
-            <Button onClick={() => fetchNextPage()} isLoading={isFetchingNextPage}>Load More</Button>
-          </Flex> : null} */}
-        <InfiniteScroll
-          dataLength={posts.length}
-          next={() => fetchNextPage()}
-          hasMore={hasNextPage!}
-          loader={
-            isFetchingNextPage ? (
-              <Flex justifyContent="center" alignItems="stretch">
-                <Spinner justifySelf="center"></Spinner>
-              </Flex>
-            ) : null
-          }
-          scrollThreshold={0}
-        >
-        </InfiniteScroll>
-
-        {error ? <Alert status="error">
-          <AlertIcon />
-          {error}
-        </Alert> : null}
-      </>
+        {hasNextPage ? (
+          <LoadMoreButton
+            fetchNextPage={fetchNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+          />
+        ) : null}
+        {error ? (
+          <Alert status="error">
+            <AlertIcon />
+            {error.message}
+          </Alert>
+        ) : null}
+      </Box>
     );
   }
-  return body
-}
+  return body;
+};
 export default PostLayout;

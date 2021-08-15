@@ -5,28 +5,23 @@ import { Box, Button, Flex, Link } from "@chakra-ui/react";
 import InputField from "../components/InputField";
 
 import NextLink from "next/link";
-import { axiosQuery } from "../utils/axios";
 import { useMutation } from "react-query";
 import { useRouter } from "next/dist/client/router";
 import { toErrorMap } from "../utils/toErrorMap";
-import { setAccessToken } from "../utils/jwt";
 
 import { MainLayout } from "../components/MainLayout";
 import PasswordField from "../components/PasswordField";
 import { loginDto } from "../dto/request/login.dto";
+import { loginMutation } from "../query/loginMutation";
+import { useJwtAuth } from "../hooks/useJwtAuth";
 
-interface loginProps { }
+interface loginProps {}
 
-export const Login: React.FC<loginProps> = ({ }) => {
+export const Login: React.FC<loginProps> = () => {
   const router = useRouter();
-  const loginMutation = (values: loginDto) => {
-    return axiosQuery<{ accessToken: string }>({
-      url: "/auth/login",
-      data: values,
-      method: "POST",
-    });
-  };
+
   const { mutateAsync: login } = useMutation("register", loginMutation);
+  const { setAccessToken } = useJwtAuth();
 
   return (
     <MainLayout variant="small">
@@ -39,7 +34,7 @@ export const Login: React.FC<loginProps> = ({ }) => {
 
           if (res && res.data) {
             setAccessToken(res.data.accessToken);
-            return router.push("/");
+            return router.push((router.query?.next as string) || "/");
           }
           return;
         }}
@@ -59,9 +54,9 @@ export const Login: React.FC<loginProps> = ({ }) => {
               ></PasswordField>
             </Box>
             <Flex>
-              <NextLink href="/forgot-password">
+              <NextLink href="/register">
                 <Link mt={4} ml={"auto"}>
-                  Forget Password?
+                  New to Instapic?
                 </Link>
               </NextLink>
             </Flex>

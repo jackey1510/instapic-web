@@ -1,4 +1,5 @@
-import { getAccessTokenUpdated } from "./jwt";
+import { useJwtAuth } from "../hooks/useJwtAuth";
+
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
 const query = axios.create({
@@ -11,6 +12,7 @@ const query = axios.create({
 });
 
 export const axiosQuery = async <T = any>(config: AxiosRequestConfig) => {
+  const { getAccessTokenUpdated } = useJwtAuth();
   return new Promise<AxiosResponse<T> | void>(async (resolve, reject) => {
     config = {
       headers: {
@@ -21,7 +23,6 @@ export const axiosQuery = async <T = any>(config: AxiosRequestConfig) => {
     const res: void | AxiosResponse<T> = await query
       .request<T>(config)
       .catch((err) => {
-        console.log(err.response);
         return reject(err?.response?.data);
       });
     return resolve(res);

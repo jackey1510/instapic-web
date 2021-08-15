@@ -3,4 +3,5 @@ export interface createUserDto {
   password: string;
   passwordConfirm: string;
   username: string;
+  bio?: string;
 }
