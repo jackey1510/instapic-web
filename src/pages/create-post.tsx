@@ -1,29 +1,25 @@
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
   Box,
-  Button,
-  CloseButton,
+  Button
 } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
-
 import React, { useState } from "react";
 import { useMutation } from "react-query";
-import InputField from "../components/InputField";
-import { MainLayout } from "../components/MainLayout";
-import { toErrorMap } from "../utils/toErrorMap";
-import { useIsAuth } from "../hooks/useIsAuth";
+import CreatePostAlert from "../components/CreatePostAlert";
 import FileInput from "../components/FileInput";
-import { uploadPhotosToSignedUrl } from "../utils/uploadPhotos";
+import InputField from "../components/InputField";
 import InputSwitch from "../components/InputSwitch";
+import { MainLayout } from "../components/MainLayout";
+import { useIsAuth } from "../hooks/useIsAuth";
 import { createPostMutation } from "../query/createPostMutation";
+import { toErrorMap } from "../utils/toErrorMap";
+import { uploadPhotosToSignedUrl } from "../utils/uploadPhotos";
 
-interface createPostProps {}
 
-const createPost: React.FC<createPostProps> = ({}) => {
+interface createPostProps { }
+
+const createPost: React.FC<createPostProps> = ({ }) => {
   useIsAuth();
 
   const router = useRouter();
@@ -93,24 +89,7 @@ const createPost: React.FC<createPostProps> = ({}) => {
           </Form>
         )}
       </Formik>
-      {uploadState === "error" ? (
-        <Alert status={uploadState} mt={4}>
-          <AlertIcon />
-          <AlertTitle mr={2}>Upload Failed!</AlertTitle>
-          <AlertDescription>Your input is invalid.</AlertDescription>
-          <CloseButton
-            position="absolute"
-            right="8px"
-            top="8px"
-            onClick={() => setUploadState(undefined)}
-          />
-        </Alert>
-      ) : uploadState === "success" ? (
-        <Alert status={uploadState} variant="subtle" mt={4}>
-          <AlertIcon />
-          Data uploaded to the server.
-        </Alert>
-      ) : null}
+      <CreatePostAlert setUploadState={setUploadState} uploadState={uploadState} />
     </MainLayout>
   );
 };
