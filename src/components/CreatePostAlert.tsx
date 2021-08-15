@@ -17,34 +17,30 @@ export const CreatePostAlert: React.FC<CreatePostAlertProps> = ({
   uploadState,
   setUploadState,
 }) => {
-  const error = (
-    <Alert status={uploadState} mt={4}>
-      <AlertIcon />
-      <AlertTitle mr={2}>Upload Failed!</AlertTitle>
-      <AlertDescription>Your input is invalid.</AlertDescription>
-      <CloseButton
-        position="absolute"
-        right="8px"
-        top="8px"
-        onClick={() => setUploadState(undefined)}
-      />
-    </Alert>
-  );
-
-  const success = (
-    <Alert status={uploadState} variant="subtle" mt={4}>
-      <AlertIcon />
-      Data uploaded to the server.
-    </Alert>
-  );
-  let alert = null;
   if (uploadState === "error") {
-    alert = error;
+    return (
+      <Alert status={uploadState} mt={4}>
+        <AlertIcon />
+        <AlertTitle mr={2}>Upload Failed!</AlertTitle>
+        <AlertDescription>Your input is invalid.</AlertDescription>
+        <CloseButton
+          position="absolute"
+          right="8px"
+          top="8px"
+          onClick={() => setUploadState(undefined)}
+        />
+      </Alert>
+    );
   }
   if (uploadState === "success") {
-    alert = success;
+    return (
+      <Alert status={uploadState} variant="subtle" mt={4}>
+        <AlertIcon />
+        Data uploaded to the server.
+      </Alert>
+    );
   }
 
-  return alert;
+  return null;
 };
 export default CreatePostAlert;
