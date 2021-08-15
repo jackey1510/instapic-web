@@ -27,6 +27,7 @@ describe("PostLayout", () => {
         updatedAt: new Date(),
       },
     ];
+
     data = {
       pageParams: [],
       pages: [
@@ -54,20 +55,17 @@ describe("PostLayout", () => {
       isRefetchError: false,
       isStale: false,
       isSuccess: true,
-      refetch: async () => {
-        const a: any = "";
-        return a;
-      },
-      remove: () => {},
+      refetch: jest.fn(),
+      remove: () => { },
       status: "success",
-      fetchNextPage: (): any => {},
-      fetchPreviousPage: (): any => {},
+      fetchNextPage: jest.fn(),
+      fetchPreviousPage: jest.fn(),
       isFetchingNextPage: false,
       isFetchingPreviousPage: false,
       hasNextPage: false,
       hasPreviousPage: false,
     };
-    jest.spyOn(axiosQuery, "axiosQuery").mockImplementation(async () => {});
+    jest.spyOn(axiosQuery, "axiosQuery").mockImplementation(async () => { });
   });
 
   it("renders", () => {
@@ -80,10 +78,18 @@ describe("PostLayout", () => {
       </QueryClientProvider>
     );
     screen.getByTestId("postLayout");
+    try {
+      screen.getByText('Load More')
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
   });
 
   it("shows nothing when no data", () => {
-    res.data!.pages[0]!.posts = [];
+    res.data!.pages[0]! = {
+      nextCursor: null,
+      posts: []
+    }
     jest
       .spyOn(useInfinitePostQuery, "useInfinitePostQuery")
       .mockImplementation(() => res);
@@ -97,10 +103,17 @@ describe("PostLayout", () => {
     } catch (error) {
       expect(error).toBeDefined();
     }
+    try {
+      screen.getByText('Load More')
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
   });
 
   it("shows skeletons when is fetching", () => {
+    res.data = undefined
     res.isFetching = true;
+    res.isFetchingNextPage = false;
     jest
       .spyOn(useInfinitePostQuery, "useInfinitePostQuery")
       .mockImplementation(() => res);
@@ -109,5 +122,47 @@ describe("PostLayout", () => {
         <PostLayout />
       </QueryClientProvider>
     );
+    const skeletons = screen.getByTestId('skeletons')
+    expect(skeletons).toBeDefined();
   });
+
+  it("shows alert when there is error", () => {
+    res.error = {
+      message: 'There is Error',
+      name: 'Error'
+    }
+    res.isError = true;
+    res.isSuccess = false;
+    res.status = "error"
+    res.isFetched = false;
+    res.isFetchedAfterMount = false;
+    jest
+      .spyOn(useInfinitePostQuery, "useInfinitePostQuery")
+      .mockImplementation(() => res);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <PostLayout />
+      </QueryClientProvider>
+    );
+    expect(screen.getByText('There is Error')).toBeDefined();
+  })
+
+  it("shows load more button when has next page", () => {
+    res.data!.pages = [{
+      nextCursor: new Date(),
+      posts
+    }]
+    res.hasNextPage = true;
+    jest
+      .spyOn(useInfinitePostQuery, "useInfinitePostQuery")
+      .mockImplementation(() => res);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <PostLayout />
+      </QueryClientProvider>
+    );
+    expect(screen.getByText('Load More')).toBeDefined();
+  })
+
+
 });

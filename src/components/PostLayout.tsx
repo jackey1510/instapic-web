@@ -2,24 +2,21 @@ import {
   Alert,
   AlertIcon,
   Box,
-  Button,
-  Flex,
   SimpleGrid,
   Skeleton,
-  //   Spinner,
   useColorMode,
   useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
-// import InfiniteScroll from "react-infinite-scroll-component";
 import { PostDto } from "../dto/response/post.dto";
 import { useInfinitePostQuery } from "../hooks/useInfinitePostQuery";
 import { mainColor } from "../utils/colorScheme";
+import { LoadMoreButton } from "./LoadMoreButton";
 import PhotoWidget from "./PhotoWidget";
 
-interface PostLayoutProps {}
+interface PostLayoutProps { }
 
-const PostLayout: React.FC<PostLayoutProps> = ({}) => {
+const PostLayout: React.FC<PostLayoutProps> = ({ }) => {
   const [isDesktop, isTablet] = useMediaQuery([
     "(min-width: 1000px)",
     "(min-width: 650px)",
@@ -33,15 +30,6 @@ const PostLayout: React.FC<PostLayoutProps> = ({}) => {
   const maxWidth = isTablet ? 300 : 500;
   const skeletons = [];
 
-  //loading skeletons
-  for (let i = 1; i <= limit; i++) {
-    skeletons.push(
-      <Box key={"skeleton" + i}>
-        <Skeleton height={height} color={mainColor[colorMode]} />
-      </Box>
-    );
-  }
-
   const {
     data,
     error,
@@ -52,8 +40,23 @@ const PostLayout: React.FC<PostLayoutProps> = ({}) => {
   } = useInfinitePostQuery();
   let body = null;
   if (isFetching && !isFetchingNextPage) {
+    //loading skeletons
+    for (let i = 1; i <= limit; i++) {
+      skeletons.push(
+        <Skeleton
+          height={height}
+          color={mainColor[colorMode]}
+          key={"skeleton" + i}
+        />
+      );
+    }
     body = (
-      <SimpleGrid columns={columns} minChildWidth="250px" spacing="40px">
+      <SimpleGrid
+        columns={columns}
+        minChildWidth="250px"
+        spacing="40px"
+        data-testid="skeletons"
+      >
         {skeletons}
       </SimpleGrid>
     );
@@ -61,7 +64,6 @@ const PostLayout: React.FC<PostLayoutProps> = ({}) => {
 
   if (data && data.pages && data.pages[0]) {
     let posts: PostDto[] = [];
-
     data.pages.forEach((p) => {
       if (p) {
         posts = posts.concat(p.posts);
@@ -87,36 +89,16 @@ const PostLayout: React.FC<PostLayoutProps> = ({}) => {
         <SimpleGrid minChildWidth={minWidth} spacing="20px">
           {images}
         </SimpleGrid>
-        {/* <InfiniteScroll
-          dataLength={posts.length}
-          next={() => fetchNextPage()}
-          hasMore={hasNextPage!}
-          loader={
-            isFetchingNextPage ? (
-              <Flex justifyContent="center" alignItems="stretch">
-                <Spinner justifySelf="center"></Spinner>
-              </Flex>
-            ) : null
-          }
-          scrollThreshold={0}
-        >
-          <Box h="5"></Box>
-        </InfiniteScroll> */}
         {hasNextPage ? (
-          <Flex mt={4} justifyContent="center" alignItems="stretch">
-            <Button
-              onClick={() => fetchNextPage()}
-              isLoading={isFetchingNextPage}
-            >
-              Load More
-            </Button>
-          </Flex>
+          <LoadMoreButton
+            fetchNextPage={fetchNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+          />
         ) : null}
-
         {error ? (
           <Alert status="error">
             <AlertIcon />
-            {error}
+            {error.message}
           </Alert>
         ) : null}
       </Box>

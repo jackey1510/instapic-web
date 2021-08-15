@@ -5,7 +5,7 @@ import { MainLayout } from "../../src/components/MainLayout";
 import { queryClient } from "../../src/pages/_app";
 
 describe("MainLayout", () => {
-  beforeEach(() => {});
+  beforeEach(() => { });
 
   it("renders", () => {
     render(

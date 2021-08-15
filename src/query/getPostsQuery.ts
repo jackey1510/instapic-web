@@ -7,15 +7,6 @@ import { PaginatedPostsDto } from "../dto/response/paginated-posts.dto";
  * @param limit
  */
 export const getPostQuery = async (cursor?: Date, limit = 9) => {
-  // const cache = queryClient.getQueryData<AxiosResponse<PaginatedPostsDto>>(
-  //   "posts", { exact: true }
-  // );
-  // // const cache = queryClient.getQueryCache();
-  // console.log("cache", cache);
-  // // if (cache) {
-  // //   return cache;
-  // // }
-
   const params = !!cursor
     ? {
         limit,
