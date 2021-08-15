@@ -10,7 +10,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   children,
 }) => {
   return (
-    <Box>
+    <Box data-testid="mainLayout">
       <NavBar />
       <Wrapper variant={variant}>{children}</Wrapper>
     </Box>
