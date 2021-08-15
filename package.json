@@ -6,6 +6,7 @@
     "build": "next build",
     "start": "next start",
     "test": "jest",
+    "test:cov": "jest --coverage",
     "gen-env": "gen-env-types .env.local -o src/types/env.d.ts -e ."
   },
   "dependencies": {
@@ -14,24 +15,20 @@
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@fontsource/shadows-into-light": "^4.5.0",
-    "@squoosh/lib": "^0.4.0",
-    "@types/jsonwebtoken": "^8.5.4",
     "axios": "^0.21.1",
     "formik": "^2.2.9",
     "framer-motion": "^4.0.3",
-    "graphql": "^15.5.1",
     "imagekitio-react": "^1.0.10",
     "jsonwebtoken": "^8.5.1",
     "next": "latest",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-infinite-scroll-component": "^6.1.0",
     "react-is": "^17.0.2",
-    "react-query": "^3.19.0",
-    "wonka": "^4.0.15"
+    "react-query": "^3.19.0"
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.4",
     "@babel/core": "^7.14.8",
     "@testing-library/dom": "^8.1.0",
     "@testing-library/jest-dom": "^5.14.1",
