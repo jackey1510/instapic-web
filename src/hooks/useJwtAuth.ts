@@ -14,6 +14,7 @@ const setAccessToken = (token: string) => {
     return;
   }
   expiryTime = new Date(0);
+  return;
 };
 
 const getAccessToken = () => {
@@ -22,7 +23,7 @@ const getAccessToken = () => {
 
 const getAccessTokenUpdated = async () => {
   if (new Date() > expiryTime || !accessToken) {
-    accessToken = await refreshAccessToken();
+    await refreshAccessToken();
   }
   return accessToken;
 };
@@ -36,7 +37,7 @@ const refreshAccessToken = async () => {
     });
 
     if (res) {
-      setAccessToken(res?.data?.accessToken);
+      setAccessToken(res.data.accessToken);
     }
     fetching = false;
   }

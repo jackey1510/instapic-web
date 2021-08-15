@@ -58,7 +58,7 @@
       "tsx"
     ],
     "rootDir": "test",
-    "testRegex": ".*\\.spec\\.tsx$",
+    "testRegex": ".*\\.spec\\.(ts|tsx)$",
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
