@@ -37,10 +37,17 @@ $ yarn test:cov
 
 ## Tech Stack
 
-**Client:** React, Next.js, jest, ImageKit, fontsource, formik, Chakra UI, Axios
+**Client:** React, Next.js, jest, ImageKit, fontsource, formik, Chakra UI, Axios, React-query
 
 ## Lessons Learned
 
 - Build a React webpage from scratch
+- Caching
 - Using Chakra UI
 - Unit testing with jest
+
+## Optimizations
+
+- SSR on homepage
+- Real-time image transformation using ImageKit (resize and webp)
+- Caching some results with react-query

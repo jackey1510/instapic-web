@@ -5,6 +5,7 @@ import { Home } from "../components/Home";
 import { MainLayout } from "../components/MainLayout";
 import { getPostQuery } from "../query/getPostsQuery";
 import { queryClient } from "./_app";
+import Head from "next/head";
 
 // SSR for homepage
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -21,6 +22,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
 const Index: React.FC = () => {
   return (
     <MainLayout variant="large">
+      <Head>
+        <meta name="description" content="Upload and browsing photos"></meta>
+      </Head>
       <Home />
     </MainLayout>
   );

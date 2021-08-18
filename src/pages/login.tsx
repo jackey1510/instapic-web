@@ -14,7 +14,7 @@ import PasswordField from "../components/PasswordField";
 import { loginDto } from "../dto/request/login.dto";
 import { loginMutation } from "../query/loginMutation";
 import { useJwtAuth } from "../hooks/useJwtAuth";
-
+import Head from "next/head";
 interface loginProps {}
 
 export const Login: React.FC<loginProps> = () => {
@@ -25,6 +25,9 @@ export const Login: React.FC<loginProps> = () => {
 
   return (
     <MainLayout variant="small">
+      <Head>
+        <meta name="description" content="Login to Instapic"></meta>
+      </Head>
       <Formik
         initialValues={{ usernameOrEmail: "", password: "" }}
         onSubmit={async (values: loginDto, { setErrors }) => {
