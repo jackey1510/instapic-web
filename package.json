@@ -5,6 +5,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "start:prod": "next start -p 8080",
     "test": "jest",
     "test:cov": "jest --coverage",
     "gen-env": "gen-env-types .env.local -o src/types/env.d.ts -e ."

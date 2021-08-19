@@ -9,7 +9,7 @@ import { MainLayout } from "../components/MainLayout";
 import PasswordField from "../components/PasswordField";
 import { createUserDto } from "../dto/request/create-user.dto";
 import { registerMutation } from "../query/registerMutation";
-
+import Head from "next/head";
 interface registerProps {}
 export const Register: React.FC<registerProps> = ({}) => {
   const router = useRouter();
@@ -17,6 +17,9 @@ export const Register: React.FC<registerProps> = ({}) => {
   const { mutateAsync: register } = useMutation("register", registerMutation);
   return (
     <MainLayout variant="small">
+      <Head>
+        <meta name="description" content="Register an Instapic account"></meta>
+      </Head>
       <Formik
         initialValues={{
           username: "",

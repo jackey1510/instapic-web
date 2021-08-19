@@ -1,7 +1,4 @@
-import {
-  Box,
-  Button
-} from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
 import React, { useState } from "react";
@@ -15,11 +12,11 @@ import { useIsAuth } from "../hooks/useIsAuth";
 import { createPostMutation } from "../query/createPostMutation";
 import { toErrorMap } from "../utils/toErrorMap";
 import { uploadPhotosToSignedUrl } from "../utils/uploadPhotos";
+import Head from "next/head";
 
+interface createPostProps {}
 
-interface createPostProps { }
-
-const createPost: React.FC<createPostProps> = ({ }) => {
+const createPost: React.FC<createPostProps> = ({}) => {
   useIsAuth();
 
   const router = useRouter();
@@ -33,6 +30,9 @@ const createPost: React.FC<createPostProps> = ({ }) => {
 
   return (
     <MainLayout variant="small">
+      <Head>
+        <meta name="description" content="Create a post"></meta>
+      </Head>
       <Formik
         initialValues={{ text: "", public: true }}
         onSubmit={async (values, { setErrors }) => {
@@ -89,7 +89,10 @@ const createPost: React.FC<createPostProps> = ({ }) => {
           </Form>
         )}
       </Formik>
-      <CreatePostAlert setUploadState={setUploadState} uploadState={uploadState} />
+      <CreatePostAlert
+        setUploadState={setUploadState}
+        uploadState={uploadState}
+      />
     </MainLayout>
   );
 };
