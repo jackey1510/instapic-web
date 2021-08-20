@@ -10,6 +10,8 @@ Mini Instagram Webpage
 - Login/logout
 - View posts
 - Create posts
+- Dark/Light Mode
+- Responsive UI
 
 ## Environment Variables
 
