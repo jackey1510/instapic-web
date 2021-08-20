@@ -40,9 +40,11 @@ $ yarn start
 $ yarn test
 
 # e2e tests
+$ export export NEXT_PUBLIC_IMAGEKIT_URL=
 $ yarn test:e2e
 
 # test coverage
+$ export NEXT_PUBLIC_IMAGEKIT_URL=
 $ yarn test:cov
 ```
 

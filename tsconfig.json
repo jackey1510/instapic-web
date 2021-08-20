@@ -23,13 +23,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "next-env.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "test/**/*.ts",
-	"test/**/*.tsx", "test/components/MainLayout.spectsx",
-  ],
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"],
   "typeRoots": ["./src/types", "./node_modules/@types/"]
 }
