@@ -9,7 +9,12 @@ import Head from "next/head";
 
 // SSR for homepage
 export const getServerSideProps: GetServerSideProps = async () => {
-  await queryClient.prefetchInfiniteQuery("posts", () => getPostQuery());
+  await queryClient.prefetchInfiniteQuery("posts", () =>
+    getPostQuery().catch((err) => {
+      console.log("API not available");
+      console.log(err);
+    })
+  );
   const dehydrated = dehydrate(queryClient);
   //workaround for dehydrate issue
   (dehydrated.queries[0].state.data as any).pageParams = [null];
