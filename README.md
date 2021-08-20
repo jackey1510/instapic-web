@@ -4,6 +4,12 @@ Mini Instagram Webpage
 
 <img width="1051" alt="Screenshot 2021-08-20 at 22 39 05" src="https://user-images.githubusercontent.com/20975443/130251411-4cdba1f0-1d8b-4587-9e8c-e13d38951cf3.png">
 
+## Features
+
+- Create account
+- Login/logout
+- View posts
+- Create posts
 
 ## Environment Variables
 
