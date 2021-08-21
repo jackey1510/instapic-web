@@ -9,26 +9,25 @@ import Head from "next/head";
 
 // SSR for homepage
 export const getServerSideProps: GetServerSideProps = async () => {
-  await queryClient
-    .prefetchInfiniteQuery("posts", () =>
-      getPostQuery().catch((err) => {
-        console.log("API not available");
-        console.log(err);
-      })
-    )
-    .catch((error) => {
-      console.error(error);
+  try {
+    const query = await getPostQuery();
+
+    if (query) {
+      await queryClient.prefetchInfiniteQuery("posts", () => query);
+      const dehydrated = dehydrate(queryClient);
+      //workaround for dehydrate issue
+      (dehydrated.queries[0].state.data as any).pageParams = [null];
       return {
-        props: {},
+        props: {
+          dehydratedState: dehydrated,
+        },
       };
-    });
-  const dehydrated = dehydrate(queryClient);
-  //workaround for dehydrate issue
-  (dehydrated.queries[0].state.data as any).pageParams = [null];
+    }
+  } catch (error) {
+    console.error(error);
+  }
   return {
-    props: {
-      dehydratedState: dehydrated,
-    },
+    props: {},
   };
 };
 const Index: React.FC = () => {

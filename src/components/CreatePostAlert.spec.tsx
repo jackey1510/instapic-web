@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import CreatePostAlert from "../../src/components/CreatePostAlert";
-import { uploadStatus } from "../../src/types/types";
+import CreatePostAlert from "./CreatePostAlert";
+import { uploadStatus } from "../types/types";
 
 describe("CreatePostAlert", () => {
   let uploadState: uploadStatus;
