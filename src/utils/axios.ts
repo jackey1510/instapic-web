@@ -1,6 +1,6 @@
 import { useJwtAuth } from "../hooks/useJwtAuth";
 
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 
 const query = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -22,8 +22,10 @@ export const axiosQuery = async <T = any>(config: AxiosRequestConfig) => {
     };
     const res: void | AxiosResponse<T> = await query
       .request<T>(config)
-      .catch((err) => {
-        return reject(err?.response?.data);
+      .catch((err: AxiosError) => {
+        if (err.response?.data) return reject(err?.response?.data);
+
+        console.error(err.message);
       });
     return resolve(res);
   });
